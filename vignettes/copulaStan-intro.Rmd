@@ -1,0 +1,81 @@
+---
+title: "Introduction to copulaStan"
+author: "Benedikt Lugauer"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to copulaStan}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(copulaStan)
+```
+
+# Introduction
+
+This vignette provides an introduction to the `copulaStan` package, which offers functions to fit bivariate Gaussian and Clayton copula models using Stan.
+
+# Installation
+
+To install the development version of `copulaStan` from GitHub, you can use:
+
+```{r}
+# install.packages("devtools")
+# devtools::install_github("benlug/copulaStan")
+```
+
+# Gaussian Copula
+
+The `fit_gaussian_copula` function fits a bivariate Gaussian copula model.
+
+## Example
+
+```{r}
+library(copula)
+library(copulaStan)
+
+# generate data from a bivariate Gaussian copula
+set.seed(123)
+n <- 1000
+true_rho <- 0.5
+cop <- normalCopula(param = true_rho, dim = 2)
+U <- rCopula(n, cop)
+
+# fit Bayesian Gaussian copula model
+fit <- fit_gaussian_copula(U, 
+                           iter = 4000, chains = 4, warmup = 2000,
+                           seed = 2024)
+fit
+```
+
+# Clayton Copula
+
+The `fit_clayton_copula` function fits a bivariate Clayton copula model.
+
+## Example
+
+```{r}
+library(copula)
+library(copulaStan)
+
+# generate data from a bivariate Clayton copula
+set.seed(123)
+n <- 1000
+true_theta <- 2
+cop <- claytonCopula(param = true_theta, dim = 2)
+U <- rCopula(n, cop)
+
+# fit the Bayesian Clayton copula model
+fit <- fit_clayton_copula(U, 
+                          iter = 4000, chains = 4, warmup = 2000, thin = 1, 
+                          seed = 2024)
+
+fit
+```
+
+

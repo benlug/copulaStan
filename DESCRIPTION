@@ -1,0 +1,20 @@
+Package: copulaStan
+Title: Fit Bivariate Gaussian and Clayton Copula Models Using Stan
+Version: 0.2.0
+Authors@R: 
+    person("Benedikt", "Lugauer", email = "benedikt.lugauer@pm.me", role = c("aut", "cre"))
+Description: Provides Stan wrapper functions to fit bivariate Gaussian and Clayton copula models.
+Depends: 
+    R (>= 3.5.0)
+Imports: 
+    rstan
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
