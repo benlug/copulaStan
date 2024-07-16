@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">copulaStan</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,8 @@
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">U</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">U</span>, copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="va">margins</span>, </span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">U</span>, </span>
+<span>                            copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="va">margins</span>, </span>
 <span>                            seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span></code></pre></div>
 <p>And an example for fitting a bivariate Clayton copula model:</p>
@@ -101,7 +102,8 @@
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, copula <span class="op">=</span> <span class="st">"clayton"</span>, marginals <span class="op">=</span> <span class="va">margins</span>,</span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>                            copula <span class="op">=</span> <span class="st">"clayton"</span>, marginals <span class="op">=</span> <span class="va">margins</span>,</span>
 <span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span></code></pre></div>
 </div>
