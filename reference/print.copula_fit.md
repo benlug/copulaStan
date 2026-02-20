@@ -1,6 +1,7 @@
 # Print a copula_fit object
 
-Print a copula_fit object
+Displays a summary of the fitted copula model including the copula type,
+marginal distributions, sample size, and a parameter summary table.
 
 ## Usage
 
@@ -21,4 +22,17 @@ print(x, ...)
 
 ## Value
 
-Invisibly returns `x`.
+Invisibly returns the `copula_fit` object `x`, allowing usage in
+pipelines.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+fit <- fit_bivariate_copula(data,
+  copula = "gaussian",
+  marginals = c("normal", "lognormal")
+)
+print(fit)
+} # }
+```

@@ -6,6 +6,9 @@
 
 ## Citation
 
+Source:
+[`DESCRIPTION`](https://github.com/benlug/copulaStan/blob/main/DESCRIPTION)
+
 Lugauer B (2026). *copulaStan: Fit Bivariate Gaussian and Clayton Copula
 Models Using Stan*. R package version 0.5.0,
 <https://benlug.github.io/copulaStan/>.

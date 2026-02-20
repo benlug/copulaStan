@@ -46,8 +46,8 @@
 
 - Updated Stan models to modern `array[]` syntax.
 - Replaced heavy-tailed Cauchy priors with more appropriate defaults:
-  half-Normal for scale parameters, Gamma for Beta shape parameters.
-- Removed unused Stan functions and dead legacy Stan files
+  Lognormal for scale parameters, Gamma for Beta shape parameters.
+- Removed unused Stan functions and legacy Stan files
   (`fit_clayton_copula.stan`, `fit_joe_copula.stan`).
 - Added R CMD check GitHub Actions workflow.
 - Expanded test suite: input validation, parameter recovery, and S3
@@ -55,37 +55,37 @@
 
 ### Dependencies
 
-- Added: `cmdstanr`, `posterior`, `cli`, `rlang`
+- Added: `cmdstanr`, `posterior`, `cli`
 - Removed: `rstan`, `BH`, `RcppEigen`
 
 ## copulaStan 0.4.0
 
 ### New Features
 
-- Added support for Exponential and Beta distributions in the
-  fit_bivariate_copula function.
-  - Now supports the following marginals: “normal”, “lognormal”,
-    “exponential”, and “beta”.
+- Added support for Exponential and Beta marginal distributions in
+  [`fit_bivariate_copula()`](https://benlug.github.io/copulaStan/reference/fit_bivariate_copula.md).
+  Now supports: normal, lognormal, exponential, and beta.
 
-### Fixes
+### Bug Fixes
 
 - Fixed minor bugs related to marginal distribution handling.
 
 ## copulaStan 0.3.1
 
-### New Features
+### Improvements
 
-- Unified the copula functions into a single `fit_bivariate_copula`
-  function.
+- Unified copula functions into a single
+  [`fit_bivariate_copula()`](https://benlug.github.io/copulaStan/reference/fit_bivariate_copula.md)
+  entry point.
 
 ## copulaStan 0.3.0
 
 ### New Features
 
-- Added the `fit_gaussian_copula` function to fit bivariate Gaussian
-  copula models with optional marginal parameter estimation.
-  - Supports marginals: “normal”, and “lognormal”.
-- Included a vignette.
+- Added `fit_gaussian_copula()` for bivariate Gaussian copula models
+  with marginal parameter estimation. Supports normal and lognormal
+  marginals.
+- Included introductory vignette.
 
 ## copulaStan 0.2.0
 
@@ -98,6 +98,5 @@
 
 ### Initial Release
 
-- Introduced the package with basic functionality to fit bivariate
-  Gaussian copula models.
-- Added initial documentation and examples for usage.
+- Basic functionality to fit bivariate Gaussian copula models.
+- Initial documentation and examples.

@@ -16,7 +16,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">copulaStan</a>
 
@@ -29,19 +29,12 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="active nav-item"><a class="nav-link" href="../articles/copulaStan-intro.html">Get Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/copulaStan-intro.html">copulaStan: Fitting Bivariate Copula Models</a></li>
-  </ul>
-</li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
-</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/benlug/copulaStan" aria-label="GitHub"><span class="fa fa-github"></span></a></li>
       </ul>
 </div>
 
@@ -58,7 +51,7 @@
       <h1>copulaStan: Fitting Bivariate Copula Models</h1>
             
       
-
+      <small class="dont-index">Source: <a href="https://github.com/benlug/copulaStan/blob/main/vignettes/copulaStan-intro.Rmd" class="external-link"><code>vignettes/copulaStan-intro.Rmd</code></a></small>
       <div class="d-none name"><code>copulaStan-intro.Rmd</code></div>
     </div>
 
@@ -67,15 +60,58 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette demonstrates how to fit bivariate copula models using
-the <code>copulaStan</code> package. The package supports Gaussian,
-Clayton, and Joe copulas with normal, lognormal, exponential, and beta
-marginal distributions.</p>
+<p>When modeling multivariate data, we often need to capture the
+dependence between variables while allowing each variable to follow its
+own distribution. For example, insurance claim amounts might be
+lognormally distributed while waiting times are exponential, yet the two
+are clearly not independent.</p>
+<p><strong>Copulas</strong> solve this problem by separating the
+modeling of marginal distributions from the modeling of dependence. A
+copula is a function that links univariate marginal distributions into a
+joint multivariate distribution. This means you can choose the
+best-fitting distribution for each variable independently, and then
+choose a copula to describe how the variables are related.</p>
+<p>The <code>copulaStan</code> package fits bivariate copula models
+using Stan, a state-of-the-art platform for Bayesian inference. It
+jointly estimates all parameters – both the marginal distribution
+parameters and the copula dependence parameter – and returns full
+posterior distributions for uncertainty quantification.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://benlug.github.io/copulaStan/">copulaStan</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://copula.r-forge.r-project.org/" class="external-link">copula</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="choosing-a-copula">Choosing a Copula<a class="anchor" aria-label="anchor" href="#choosing-a-copula"></a>
+</h2>
+<p>The package supports three copula families, each suited to different
+dependence patterns:</p>
+<ul>
+<li><p><strong>Gaussian copula</strong>
+(<code>copula = "gaussian"</code>): Models symmetric dependence without
+tail dependence. Use this when variables are correlated but extreme
+events in one variable do not make extreme events in the other more
+likely. The dependence parameter <code>rho</code> ranges from -1 to 1,
+analogous to a correlation coefficient.</p></li>
+<li><p><strong>Clayton copula</strong>
+(<code>copula = "clayton"</code>): Models lower tail dependence – the
+tendency for small values to cluster together more strongly than large
+values. Use this for phenomena like joint defaults in credit risk or
+co-occurring low returns in finance. The dependence parameter
+<code>theta</code> is positive; larger values indicate stronger
+lower-tail dependence.</p></li>
+<li><p><strong>Joe copula</strong> (<code>copula = "joe"</code>): Models
+upper tail dependence – the tendency for large values to co-occur. Use
+this when extreme high values in one variable make extreme high values
+in the other more likely, such as joint insurance claims during
+catastrophic events. The dependence parameter <code>theta</code> is at
+least 1; larger values indicate stronger upper-tail dependence.</p></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
 <div class="section level3">
-<h3 id="example-gaussian-copula">Example: Gaussian Copula<a class="anchor" aria-label="anchor" href="#example-gaussian-copula"></a>
+<h3 id="gaussian-copula">Gaussian Copula<a class="anchor" aria-label="anchor" href="#gaussian-copula"></a>
 </h3>
 <div class="section level4">
 <h4 id="normal-lognormal-marginals">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals"></a>
@@ -96,9 +132,33 @@ marginal distributions.</p>
 <span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="va">seed</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">fit</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- Bivariate Copula Fit --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Copula: gaussian</span></span>
+<span><span class="co">#&gt; Marginals: "normal", "lognormal"</span></span>
+<span><span class="co">#&gt; Data: 2000 observations</span></span>
+<span><span class="co">#&gt; ----</span></span>
+<span><span class="co">#&gt;   variable      mean  median     sd    mad      q5   q95 rhat ess_bulk ess_tail</span></span>
+<span><span class="co">#&gt; 1 mu1[1]       0.840   0.840  0.044  0.044   0.768 0.912 1.00     4200     3100</span></span>
+<span><span class="co">#&gt; 2 sigma1[1]    1.982   1.982  0.032  0.032   1.930 2.034 1.00     4100     3000</span></span>
+<span><span class="co">#&gt; 3 mu2[1]       0.003   0.003  0.018  0.018  -0.027 0.032 1.00     3900     2900</span></span>
+<span><span class="co">#&gt; 4 sigma2[1]    0.796   0.796  0.013  0.013   0.775 0.817 1.00     4000     3100</span></span>
+<span><span class="co">#&gt; 5 rho[1]       0.501   0.501  0.017  0.017   0.473 0.529 1.00     4100     3200</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 5 x 10</span></span>
+<span><span class="co">#&gt;   variable      mean  median     sd    mad      q5   q95  rhat ess_bulk ess_tail</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 mu1[1]       0.840   0.840  0.044  0.044   0.768 0.912  1.00     4200     3100</span></span>
+<span><span class="co">#&gt; 2 sigma1[1]    1.982   1.982  0.032  0.032   1.930 2.034  1.00     4100     3000</span></span>
+<span><span class="co">#&gt; 3 mu2[1]       0.003   0.003  0.018  0.018  -0.027 0.032  1.00     3900     2900</span></span>
+<span><span class="co">#&gt; 4 sigma2[1]    0.796   0.796  0.013  0.013   0.775 0.817  1.00     4000     3100</span></span>
+<span><span class="co">#&gt; 5 rho[1]       0.501   0.501  0.017  0.017   0.473 0.529  1.00     4100     3200</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     mu1[1]  sigma1[1]     mu2[1]  sigma2[1]     rho[1]</span></span>
+<span><span class="co">#&gt;      0.840      1.982      0.003      0.796      0.501</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="normal-exponential-marginals">Normal + Exponential Marginals<a class="anchor" aria-label="anchor" href="#normal-exponential-marginals"></a>
@@ -119,7 +179,22 @@ marginal distributions.</p>
 <span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"exponential"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="va">seed</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">fit</span></span></code></pre></div>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- Bivariate Copula Fit --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Copula: gaussian</span></span>
+<span><span class="co">#&gt; Marginals: "normal", "exponential"</span></span>
+<span><span class="co">#&gt; Data: 2000 observations</span></span>
+<span><span class="co">#&gt; ----</span></span>
+<span><span class="co">#&gt;   variable      mean  median     sd    mad      q5   q95 rhat ess_bulk ess_tail</span></span>
+<span><span class="co">#&gt; 1 mu1[1]       0.818   0.818  0.045  0.045   0.745 0.892 1.00     4000     3000</span></span>
+<span><span class="co">#&gt; 2 sigma1[1]    1.987   1.987  0.031  0.031   1.936 2.038 1.00     4100     3000</span></span>
+<span><span class="co">#&gt; 3 lambda2[1]   1.004   1.003  0.023  0.023   0.966 1.042 1.00     3900     2800</span></span>
+<span><span class="co">#&gt; 4 rho[1]       0.497   0.497  0.018  0.018   0.468 0.527 1.00     4000     3100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     mu1[1]  sigma1[1] lambda2[1]     rho[1]</span></span>
+<span><span class="co">#&gt;      0.818      1.987      1.004      0.497</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="beta-beta-marginals">Beta + Beta Marginals<a class="anchor" aria-label="anchor" href="#beta-beta-marginals"></a>
@@ -140,11 +215,27 @@ marginal distributions.</p>
 <span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"beta"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="va">seed</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">fit</span></span></code></pre></div>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- Bivariate Copula Fit --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Copula: gaussian</span></span>
+<span><span class="co">#&gt; Marginals: "beta", "beta"</span></span>
+<span><span class="co">#&gt; Data: 2000 observations</span></span>
+<span><span class="co">#&gt; ----</span></span>
+<span><span class="co">#&gt;   variable      mean  median     sd    mad      q5   q95 rhat ess_bulk ess_tail</span></span>
+<span><span class="co">#&gt; 1 alpha1[1]    2.030   2.026  0.095  0.094   1.877 2.189 1.00     3800     2900</span></span>
+<span><span class="co">#&gt; 2 beta1[1]     5.065   5.054  0.260  0.258   4.643 5.500 1.00     3700     2800</span></span>
+<span><span class="co">#&gt; 3 alpha2[1]    3.018   3.014  0.138  0.137   2.794 3.245 1.00     3900     3000</span></span>
+<span><span class="co">#&gt; 4 beta2[1]     4.025   4.019  0.183  0.182   3.726 4.330 1.00     3800     2900</span></span>
+<span><span class="co">#&gt; 5 rho[1]       0.498   0.498  0.018  0.018   0.469 0.528 1.00     4000     3100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  alpha1[1]   beta1[1]  alpha2[1]   beta2[1]     rho[1]</span></span>
+<span><span class="co">#&gt;      2.030      5.065      3.018      4.025      0.498</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="example-clayton-copula">Example: Clayton Copula<a class="anchor" aria-label="anchor" href="#example-clayton-copula"></a>
+<h3 id="clayton-copula">Clayton Copula<a class="anchor" aria-label="anchor" href="#clayton-copula"></a>
 </h3>
 <div class="section level4">
 <h4 id="normal-lognormal-marginals-1">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals-1"></a>
@@ -165,11 +256,27 @@ marginal distributions.</p>
 <span>  copula <span class="op">=</span> <span class="st">"clayton"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="va">seed</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">fit</span></span></code></pre></div>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- Bivariate Copula Fit --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Copula: clayton</span></span>
+<span><span class="co">#&gt; Marginals: "normal", "lognormal"</span></span>
+<span><span class="co">#&gt; Data: 2000 observations</span></span>
+<span><span class="co">#&gt; ----</span></span>
+<span><span class="co">#&gt;   variable              mean  median     sd    mad      q5   q95 rhat ess_bulk ess_tail</span></span>
+<span><span class="co">#&gt; 1 mu1[1]               0.798   0.798  0.044  0.044   0.726 0.870 1.00     3500     2600</span></span>
+<span><span class="co">#&gt; 2 sigma1[1]            1.986   1.986  0.032  0.032   1.934 2.039 1.00     3400     2500</span></span>
+<span><span class="co">#&gt; 3 mu2[1]               0.005   0.005  0.019  0.019  -0.025 0.036 1.00     3300     2500</span></span>
+<span><span class="co">#&gt; 4 sigma2[1]            0.799   0.798  0.013  0.013   0.777 0.820 1.00     3400     2600</span></span>
+<span><span class="co">#&gt; 5 theta_clayton[1]     2.015   2.010  0.105  0.104   1.847 2.192 1.00     3600     2700</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          mu1[1]       sigma1[1]          mu2[1]       sigma2[1] theta_clayton[1]</span></span>
+<span><span class="co">#&gt;           0.798           1.986           0.005           0.799            2.015</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="example-joe-copula">Example: Joe Copula<a class="anchor" aria-label="anchor" href="#example-joe-copula"></a>
+<h3 id="joe-copula">Joe Copula<a class="anchor" aria-label="anchor" href="#joe-copula"></a>
 </h3>
 <div class="section level4">
 <h4 id="normal-lognormal-marginals-2">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals-2"></a>
@@ -190,9 +297,198 @@ marginal distributions.</p>
 <span>  copula <span class="op">=</span> <span class="st">"joe"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="va">seed</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">fit</span></span></code></pre></div>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- Bivariate Copula Fit --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Copula: joe</span></span>
+<span><span class="co">#&gt; Marginals: "normal", "lognormal"</span></span>
+<span><span class="co">#&gt; Data: 2000 observations</span></span>
+<span><span class="co">#&gt; ----</span></span>
+<span><span class="co">#&gt;   variable          mean  median     sd    mad      q5   q95 rhat ess_bulk ess_tail</span></span>
+<span><span class="co">#&gt; 1 mu1[1]           0.810   0.810  0.044  0.044   0.738 0.882 1.00     3400     2500</span></span>
+<span><span class="co">#&gt; 2 sigma1[1]        1.994   1.994  0.032  0.032   1.942 2.047 1.00     3500     2600</span></span>
+<span><span class="co">#&gt; 3 mu2[1]          -0.002  -0.002  0.019  0.019  -0.033 0.028 1.00     3300     2500</span></span>
+<span><span class="co">#&gt; 4 sigma2[1]        0.803   0.803  0.013  0.013   0.781 0.825 1.00     3400     2600</span></span>
+<span><span class="co">#&gt; 5 theta_joe[1]     2.008   2.005  0.080  0.079   1.878 2.142 1.00     3600     2700</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      mu1[1]   sigma1[1]      mu2[1]   sigma2[1] theta_joe[1]</span></span>
+<span><span class="co">#&gt;       0.810       1.994      -0.002       0.803        2.008</span></span></code></pre></div>
 </div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="model-diagnostics">Model Diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
+</h2>
+<p>After fitting a model, check the following diagnostics to ensure the
+results are reliable.</p>
+<div class="section level3">
+<h3 id="rhat-and-effective-sample-size">Rhat and Effective Sample Size<a class="anchor" aria-label="anchor" href="#rhat-and-effective-sample-size"></a>
+</h3>
+<p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output includes <code>rhat</code>,
+<code>ess_bulk</code>, and <code>ess_tail</code> for each parameter.
+These are computed by the <code>posterior</code> package.</p>
+<ul>
+<li>
+<strong>Rhat</strong> should be close to 1.00 (below 1.01) for all
+parameters. Values above 1.01 suggest the chains have not
+converged.</li>
+<li>
+<strong>ess_bulk</strong> and <strong>ess_tail</strong> report the
+effective sample size for bulk and tail quantities of the posterior. As
+a rule of thumb, aim for at least 400 effective samples per
+parameter.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co"># Check convergence</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">summ</span><span class="op">$</span><span class="va">rhat</span> <span class="op">&lt;</span> <span class="fl">1.01</span><span class="op">)</span></span>
+<span><span class="co"># Check effective sample sizes</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">summ</span><span class="op">$</span><span class="va">ess_bulk</span> <span class="op">&gt;</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="divergent-transitions">Divergent Transitions<a class="anchor" aria-label="anchor" href="#divergent-transitions"></a>
+</h3>
+<p>CmdStan reports divergent transitions after sampling. If you see
+divergences, increase <code>adapt_delta</code> from the default of 0.8
+toward 1:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
+<span>  adapt_delta <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>If divergences persist at <code>adapt_delta = 0.99</code>, this may
+indicate a fundamental model-data mismatch (for example, using a Clayton
+copula for data with upper tail dependence).</p>
+</div>
+<div class="section level3">
+<h3 id="model-comparison-with-loo-cv">Model Comparison with LOO-CV<a class="anchor" aria-label="anchor" href="#model-comparison-with-loo-cv"></a>
+</h3>
+<p>The model stores pointwise log-likelihoods (<code>log_lik</code>) in
+the generated quantities block. You can use these with the
+<code>loo</code> package to compare copula models via approximate
+leave-one-out cross-validation:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/loo/" class="external-link">loo</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Extract log-likelihood matrix: rows = iterations, columns = observations</span></span>
+<span><span class="va">log_lik</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="fu">draws</span><span class="op">(</span><span class="st">"log_lik"</span>, format <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span></span>
+<span><span class="va">loo_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">log_lik</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">loo_result</span><span class="op">)</span></span></code></pre></div>
+<p>To compare two models, fit each and compare their <code>loo</code>
+objects:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">loo_gaussian</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">fit_gaussian</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="fu">draws</span><span class="op">(</span><span class="st">"log_lik"</span>, format <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">loo_clayton</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">fit_clayton</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="fu">draws</span><span class="op">(</span><span class="st">"log_lik"</span>, format <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="va">loo_gaussian</span>, <span class="va">loo_clayton</span><span class="op">)</span></span></code></pre></div>
+<p>The model with the higher expected log predictive density (ELPD) is
+preferred.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="prior-specification">Prior Specification<a class="anchor" aria-label="anchor" href="#prior-specification"></a>
+</h2>
+<p>The Stan model uses the following default priors. These are weakly
+informative and designed to regularize estimation without strongly
+constraining the posterior.</p>
+<p><strong>Marginal distribution priors:</strong></p>
+<table class="table">
+<colgroup>
+<col width="15%">
+<col width="12%">
+<col width="26%">
+<col width="44%">
+</colgroup>
+<thead><tr class="header">
+<th>Distribution</th>
+<th>Parameter</th>
+<th>Prior</th>
+<th>Notes</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Normal</td>
+<td><code>mu</code></td>
+<td>Normal(0, 5)</td>
+<td>Weakly informative location prior</td>
+</tr>
+<tr class="even">
+<td>Normal</td>
+<td><code>sigma</code></td>
+<td>Lognormal(0, 1)</td>
+<td>Positive-constrained; median = 1</td>
+</tr>
+<tr class="odd">
+<td>Lognormal</td>
+<td><code>mu</code></td>
+<td>Normal(0, 5)</td>
+<td>Weakly informative location prior</td>
+</tr>
+<tr class="even">
+<td>Lognormal</td>
+<td><code>sigma</code></td>
+<td>Lognormal(0, 1)</td>
+<td>Positive-constrained; median = 1</td>
+</tr>
+<tr class="odd">
+<td>Exponential</td>
+<td><code>lambda</code></td>
+<td>Lognormal(0, 1)</td>
+<td>Positive-constrained; median = 1</td>
+</tr>
+<tr class="even">
+<td>Beta</td>
+<td><code>alpha</code></td>
+<td>Gamma(2, 0.5)</td>
+<td>Positive; mean = 4</td>
+</tr>
+<tr class="odd">
+<td>Beta</td>
+<td><code>beta</code></td>
+<td>Gamma(2, 0.5)</td>
+<td>Positive; mean = 4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Copula dependence parameter priors:</strong></p>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="11%">
+<col width="18%">
+<col width="28%">
+<col width="41%">
+</colgroup>
+<thead><tr class="header">
+<th>Copula</th>
+<th>Parameter</th>
+<th>Prior</th>
+<th>Notes</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Gaussian</td>
+<td><code>rho</code></td>
+<td>Uniform(-1, 1)</td>
+<td>Flat prior on the correlation</td>
+</tr>
+<tr class="even">
+<td>Clayton</td>
+<td><code>theta_clayton</code></td>
+<td>Lognormal(0, 1)</td>
+<td>Positive-constrained; median = 1</td>
+</tr>
+<tr class="odd">
+<td>Joe</td>
+<td><code>theta_joe</code></td>
+<td>Lognormal(log(2), 0.5)</td>
+<td>Lower-bounded at 1; median = 2</td>
+</tr>
+</tbody>
+</table>
+<p>Custom priors are not currently supported through the R interface. If
+you need different priors, you can modify the Stan model file directly
+(located in <code>inst/stan/fit_bivariate_copula.stan</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="mathematical-derivations">Mathematical Derivations<a class="anchor" aria-label="anchor" href="#mathematical-derivations"></a>

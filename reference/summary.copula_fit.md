@@ -1,6 +1,8 @@
 # Summarize a copula_fit object
 
-Summarize a copula_fit object
+Returns a tibble of posterior summaries for the model parameters,
+including mean, median, standard deviation, MAD, quantiles, and
+convergence diagnostics (Rhat, ESS).
 
 ## Usage
 
@@ -21,5 +23,19 @@ summary(object, ...)
 
 ## Value
 
-A tibble of parameter summaries from
-[`posterior::summarise_draws()`](https://mc-stan.org/posterior/reference/draws_summary.html).
+A tibble from
+[`posterior::summarise_draws()`](https://mc-stan.org/posterior/reference/draws_summary.html)
+with one row per parameter and columns for summary statistics and
+diagnostics.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+fit <- fit_bivariate_copula(data,
+  copula = "gaussian",
+  marginals = c("normal", "lognormal")
+)
+summary(fit)
+} # }
+```
