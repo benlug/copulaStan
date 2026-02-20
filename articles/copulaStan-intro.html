@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>copulaStan: Fitting Bivariate Gaussian and Clayton Copulas • copulaStan</title>
+<title>copulaStan: Fitting Bivariate Copula Models • copulaStan</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="copulaStan: Fitting Bivariate Gaussian and Clayton Copulas">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="copulaStan: Fitting Bivariate Copula Models">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">copulaStan</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/copulaStan-intro.html">copulaStan: Fitting Bivariate Gaussian and Clayton Copulas</a></li>
+<li><a class="dropdown-item" href="../articles/copulaStan-intro.html">copulaStan: Fitting Bivariate Copula Models</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -55,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>copulaStan: Fitting Bivariate Gaussian and Clayton Copulas</h1>
+      <h1>copulaStan: Fitting Bivariate Copula Models</h1>
             
       
 
@@ -67,10 +67,10 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette, we demonstrate how to fit bivariate Gaussian copula
-models using the <code>copulaStan</code> package. We provide examples
-for fitting Gaussian copula models with different types of marginals,
-including normal, and lognormal distributions.</p>
+<p>This vignette demonstrates how to fit bivariate copula models using
+the <code>copulaStan</code> package. The package supports Gaussian,
+Clayton, and Joe copulas with normal, lognormal, exponential, and beta
+marginal distributions.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://benlug.github.io/copulaStan/">copulaStan</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://copula.r-forge.r-project.org/" class="external-link">copula</a></span><span class="op">)</span></span></code></pre></div>
@@ -84,7 +84,7 @@ including normal, and lognormal distributions.</p>
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">true_rho</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  </span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
 <span></span>
 <span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"lnorm"</span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>meanlog <span class="op">=</span> <span class="fl">0</span>, sdlog <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
@@ -92,143 +92,22 @@ including normal, and lognormal distributions.</p>
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>, </span>
-<span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Gradient evaluation took 0.002766 seconds</span></span>
-<span><span class="co">## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 27.66 seconds.</span></span>
-<span><span class="co">## Chain 1: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1:  Elapsed Time: 11.892 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 1:                11.525 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 1:                23.417 seconds (Total)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Gradient evaluation took 0.001615 seconds</span></span>
-<span><span class="co">## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 16.15 seconds.</span></span>
-<span><span class="co">## Chain 2: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2:  Elapsed Time: 12.236 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 2:                10.953 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 2:                23.189 seconds (Total)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Gradient evaluation took 0.00162 seconds</span></span>
-<span><span class="co">## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 16.2 seconds.</span></span>
-<span><span class="co">## Chain 3: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3:  Elapsed Time: 12.288 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 3:                11.878 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 3:                24.166 seconds (Total)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Gradient evaluation took 0.001611 seconds</span></span>
-<span><span class="co">## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 16.11 seconds.</span></span>
-<span><span class="co">## Chain 4: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4:  Elapsed Time: 11.554 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 4:                11.583 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 4:                23.137 seconds (Total)</span></span>
-<span><span class="co">## Chain 4:</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span></span></code></pre></div>
-<pre><code><span><span class="co">## Inference for Stan model: anon_model.</span></span>
-<span><span class="co">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
-<span><span class="co">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##               mean se_mean   sd     2.5%      25%      50%      75%    97.5%</span></span>
-<span><span class="co">## mu1[1]        0.79    0.00 0.05     0.70     0.75     0.79     0.82     0.88</span></span>
-<span><span class="co">## sigma1[1]     2.03    0.00 0.03     1.97     2.01     2.03     2.06     2.10</span></span>
-<span><span class="co">## mu2[1]        0.02    0.00 0.02    -0.01     0.01     0.02     0.03     0.06</span></span>
-<span><span class="co">## sigma2[1]     0.79    0.00 0.01     0.76     0.78     0.79     0.79     0.81</span></span>
-<span><span class="co">## rho[1]        0.53    0.00 0.02     0.50     0.52     0.53     0.54     0.56</span></span>
-<span><span class="co">## lp__      -4448.13    0.04 1.61 -4452.09 -4448.96 -4447.79 -4446.94 -4446.01</span></span>
-<span><span class="co">##           n_eff Rhat</span></span>
-<span><span class="co">## mu1[1]     3576    1</span></span>
-<span><span class="co">## sigma1[1]  3748    1</span></span>
-<span><span class="co">## mu2[1]     3482    1</span></span>
-<span><span class="co">## sigma2[1]  3680    1</span></span>
-<span><span class="co">## rho[1]     3459    1</span></span>
-<span><span class="co">## lp__       1771    1</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Samples were drawn using NUTS(diag_e) at Tue Jul 16 17:31:16 2024.</span></span>
-<span><span class="co">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
-<span><span class="co">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
-<span><span class="co">## convergence, Rhat=1).</span></span></code></pre>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="normal-exponential-marginals">Normal + Exponential Marginals<a class="anchor" aria-label="anchor" href="#normal-exponential-marginals"></a>
 </h4>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">true_rho</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  </span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
 <span></span>
 <span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"exp"</span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
@@ -236,296 +115,45 @@ including normal, and lognormal distributions.</p>
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"exponential"</span><span class="op">)</span>, </span>
-<span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Gradient evaluation took 0.001494 seconds</span></span>
-<span><span class="co">## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 14.94 seconds.</span></span>
-<span><span class="co">## Chain 1: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1:  Elapsed Time: 9.993 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 1:                8.99 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 1:                18.983 seconds (Total)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Gradient evaluation took 0.001486 seconds</span></span>
-<span><span class="co">## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 14.86 seconds.</span></span>
-<span><span class="co">## Chain 2: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2:  Elapsed Time: 10.212 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 2:                9.527 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 2:                19.739 seconds (Total)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Gradient evaluation took 0.001468 seconds</span></span>
-<span><span class="co">## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 14.68 seconds.</span></span>
-<span><span class="co">## Chain 3: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3:  Elapsed Time: 10.353 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 3:                10.524 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 3:                20.877 seconds (Total)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Gradient evaluation took 0.001498 seconds</span></span>
-<span><span class="co">## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 14.98 seconds.</span></span>
-<span><span class="co">## Chain 4: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4:  Elapsed Time: 9.851 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 4:                10.451 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 4:                20.302 seconds (Total)</span></span>
-<span><span class="co">## Chain 4:</span></span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span></span></code></pre></div>
-<pre><code><span><span class="co">## Inference for Stan model: anon_model.</span></span>
-<span><span class="co">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
-<span><span class="co">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##                mean se_mean   sd     2.5%      25%      50%      75%    97.5%</span></span>
-<span><span class="co">## mu1[1]         0.77    0.00 0.04     0.69     0.74     0.77     0.80     0.86</span></span>
-<span><span class="co">## sigma1[1]      2.05    0.00 0.03     1.98     2.02     2.05     2.07     2.11</span></span>
-<span><span class="co">## lambda2[1]     0.99    0.00 0.02     0.94     0.97     0.99     1.00     1.03</span></span>
-<span><span class="co">## rho[1]         0.54    0.00 0.01     0.51     0.53     0.54     0.55     0.57</span></span>
-<span><span class="co">## lp__       -4122.40    0.03 1.43 -4125.98 -4123.15 -4122.07 -4121.35 -4120.64</span></span>
-<span><span class="co">##            n_eff Rhat</span></span>
-<span><span class="co">## mu1[1]      3361    1</span></span>
-<span><span class="co">## sigma1[1]   3234    1</span></span>
-<span><span class="co">## lambda2[1]  3272    1</span></span>
-<span><span class="co">## rho[1]      3169    1</span></span>
-<span><span class="co">## lp__        2162    1</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Samples were drawn using NUTS(diag_e) at Tue Jul 16 17:32:37 2024.</span></span>
-<span><span class="co">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
-<span><span class="co">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
-<span><span class="co">## convergence, Rhat=1).</span></span></code></pre>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"exponential"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="beta-beta-marginals">Beta + Beta Marginals<a class="anchor" aria-label="anchor" href="#beta-beta-marginals"></a>
 </h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">true_rho</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  </span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
 <span></span>
-<span><span class="co"># Parameters for beta distributions</span></span>
-<span><span class="va">alpha1</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
-<span><span class="va">beta1</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">alpha2</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
-<span><span class="va">beta2</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
-<span></span>
-<span><span class="co"># Generate beta distributed data</span></span>
 <span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"beta"</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="va">alpha1</span>, shape2 <span class="op">=</span> <span class="va">beta1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="va">alpha2</span>, shape2 <span class="op">=</span> <span class="va">beta2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="fl">2</span>, shape2 <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="fl">3</span>, shape2 <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/ellipCopula.html" class="external-link">normalCopula</a></span><span class="op">(</span>param <span class="op">=</span> <span class="va">true_rho</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"beta"</span><span class="op">)</span>, </span>
-<span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Gradient evaluation took 0.003532 seconds</span></span>
-<span><span class="co">## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 35.32 seconds.</span></span>
-<span><span class="co">## Chain 1: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1:  Elapsed Time: 132.557 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 1:                162.965 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 1:                295.522 seconds (Total)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Gradient evaluation took 0.00346 seconds</span></span>
-<span><span class="co">## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 34.6 seconds.</span></span>
-<span><span class="co">## Chain 2: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2:  Elapsed Time: 140.862 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 2:                141.042 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 2:                281.904 seconds (Total)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Gradient evaluation took 0.003486 seconds</span></span>
-<span><span class="co">## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 34.86 seconds.</span></span>
-<span><span class="co">## Chain 3: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3:  Elapsed Time: 138.374 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 3:                144.726 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 3:                283.1 seconds (Total)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Gradient evaluation took 0.003487 seconds</span></span>
-<span><span class="co">## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 34.87 seconds.</span></span>
-<span><span class="co">## Chain 4: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4:  Elapsed Time: 142.18 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 4:                124.105 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 4:                266.285 seconds (Total)</span></span>
-<span><span class="co">## Chain 4:</span></span></code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span></span></code></pre></div>
-<pre><code><span><span class="co">## Inference for Stan model: anon_model.</span></span>
-<span><span class="co">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
-<span><span class="co">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##              mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff</span></span>
-<span><span class="co">## alpha1[1]    1.94    0.00 0.06    1.83    1.90    1.94    1.97    2.05  1816</span></span>
-<span><span class="co">## beta1[1]     4.85    0.00 0.15    4.55    4.74    4.84    4.95    5.16  2027</span></span>
-<span><span class="co">## alpha2[1]    3.13    0.00 0.09    2.95    3.06    3.13    3.19    3.32  1959</span></span>
-<span><span class="co">## beta2[1]     4.09    0.00 0.12    3.85    4.01    4.09    4.17    4.33  1997</span></span>
-<span><span class="co">## rho[1]       0.53    0.00 0.02    0.50    0.52    0.53    0.54    0.56  2168</span></span>
-<span><span class="co">## lp__      1986.30    0.04 1.56 1982.51 1985.46 1986.62 1987.45 1988.35  1627</span></span>
-<span><span class="co">##           Rhat</span></span>
-<span><span class="co">## alpha1[1]    1</span></span>
-<span><span class="co">## beta1[1]     1</span></span>
-<span><span class="co">## alpha2[1]    1</span></span>
-<span><span class="co">## beta2[1]     1</span></span>
-<span><span class="co">## rho[1]       1</span></span>
-<span><span class="co">## lp__         1</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Samples were drawn using NUTS(diag_e) at Tue Jul 16 17:51:26 2024.</span></span>
-<span><span class="co">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
-<span><span class="co">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
-<span><span class="co">## convergence, Rhat=1).</span></span></code></pre>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"beta"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="example-clatyon-copula">Example: Clatyon Copula<a class="anchor" aria-label="anchor" href="#example-clatyon-copula"></a>
+<h3 id="example-clayton-copula">Example: Clayton Copula<a class="anchor" aria-label="anchor" href="#example-clayton-copula"></a>
 </h3>
 <div class="section level4">
 <h4 id="normal-lognormal-marginals-1">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals-1"></a>
 </h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">true_theta</span> <span class="op">&lt;-</span> <span class="fl">2.0</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  </span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
 <span></span>
 <span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"lnorm"</span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>meanlog <span class="op">=</span> <span class="fl">0</span>, sdlog <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
@@ -533,134 +161,11 @@ including normal, and lognormal distributions.</p>
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"clayton"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>, </span>
-<span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Gradient evaluation took 0.00226 seconds</span></span>
-<span><span class="co">## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 22.6 seconds.</span></span>
-<span><span class="co">## Chain 1: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1:  Elapsed Time: 24.424 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 1:                19.103 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 1:                43.527 seconds (Total)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Gradient evaluation took 0.002052 seconds</span></span>
-<span><span class="co">## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 20.52 seconds.</span></span>
-<span><span class="co">## Chain 2: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2:  Elapsed Time: 24.557 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 2:                23.902 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 2:                48.459 seconds (Total)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Gradient evaluation took 0.00205 seconds</span></span>
-<span><span class="co">## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 20.5 seconds.</span></span>
-<span><span class="co">## Chain 3: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3:  Elapsed Time: 23.649 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 3:                23.453 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 3:                47.102 seconds (Total)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Gradient evaluation took 0.002074 seconds</span></span>
-<span><span class="co">## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 20.74 seconds.</span></span>
-<span><span class="co">## Chain 4: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4:  Elapsed Time: 23.795 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 4:                25.364 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 4:                49.159 seconds (Total)</span></span>
-<span><span class="co">## Chain 4:</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span></span></code></pre></div>
-<pre><code><span><span class="co">## Inference for Stan model: anon_model.</span></span>
-<span><span class="co">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
-<span><span class="co">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##               mean se_mean   sd     2.5%      25%      50%      75%    97.5%</span></span>
-<span><span class="co">## mu1[1]        0.80    0.00 0.04     0.72     0.78     0.80     0.83     0.89</span></span>
-<span><span class="co">## sigma1[1]     1.98    0.00 0.03     1.93     1.96     1.98     2.00     2.04</span></span>
-<span><span class="co">## mu2[1]        0.01    0.00 0.02    -0.02     0.00     0.01     0.02     0.05</span></span>
-<span><span class="co">## sigma2[1]     0.79    0.00 0.01     0.76     0.78     0.79     0.80     0.81</span></span>
-<span><span class="co">## theta[1]      2.07    0.00 0.09     1.90     2.01     2.07     2.12     2.24</span></span>
-<span><span class="co">## lp__      -3831.45    0.04 1.66 -3835.67 -3832.29 -3831.11 -3830.23 -3829.30</span></span>
-<span><span class="co">##           n_eff Rhat</span></span>
-<span><span class="co">## mu1[1]     1924    1</span></span>
-<span><span class="co">## sigma1[1]  1879    1</span></span>
-<span><span class="co">## mu2[1]     2141    1</span></span>
-<span><span class="co">## sigma2[1]  1953    1</span></span>
-<span><span class="co">## theta[1]   1623    1</span></span>
-<span><span class="co">## lp__       1638    1</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Samples were drawn using NUTS(diag_e) at Tue Jul 16 17:54:35 2024.</span></span>
-<span><span class="co">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
-<span><span class="co">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
-<span><span class="co">## convergence, Rhat=1).</span></span></code></pre>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"clayton"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -669,11 +174,11 @@ including normal, and lognormal distributions.</p>
 <div class="section level4">
 <h4 id="normal-lognormal-marginals-2">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals-2"></a>
 </h4>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">true_theta</span> <span class="op">&lt;-</span> <span class="fl">2.0</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  </span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
 <span></span>
 <span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"lnorm"</span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>meanlog <span class="op">=</span> <span class="fl">0</span>, sdlog <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
@@ -681,142 +186,20 @@ including normal, and lognormal distributions.</p>
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"joe"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>, </span>
-<span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Gradient evaluation took 0.002278 seconds</span></span>
-<span><span class="co">## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 22.78 seconds.</span></span>
-<span><span class="co">## Chain 1: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## Chain 1:  Elapsed Time: 19.143 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 1:                19.38 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 1:                38.523 seconds (Total)</span></span>
-<span><span class="co">## Chain 1: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Gradient evaluation took 0.00226 seconds</span></span>
-<span><span class="co">## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 22.6 seconds.</span></span>
-<span><span class="co">## Chain 2: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## Chain 2:  Elapsed Time: 20.59 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 2:                18.114 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 2:                38.704 seconds (Total)</span></span>
-<span><span class="co">## Chain 2: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Gradient evaluation took 0.002181 seconds</span></span>
-<span><span class="co">## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 21.81 seconds.</span></span>
-<span><span class="co">## Chain 3: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## Chain 3:  Elapsed Time: 20.231 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 3:                21.777 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 3:                42.008 seconds (Total)</span></span>
-<span><span class="co">## Chain 3: </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Gradient evaluation took 0.002249 seconds</span></span>
-<span><span class="co">## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 22.49 seconds.</span></span>
-<span><span class="co">## Chain 4: Adjust your expectations accordingly!</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)</span></span>
-<span><span class="co">## Chain 4: </span></span>
-<span><span class="co">## Chain 4:  Elapsed Time: 19.684 seconds (Warm-up)</span></span>
-<span><span class="co">## Chain 4:                21.814 seconds (Sampling)</span></span>
-<span><span class="co">## Chain 4:                41.498 seconds (Total)</span></span>
-<span><span class="co">## Chain 4:</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span></span></code></pre></div>
-<pre><code><span><span class="co">## Inference for Stan model: anon_model.</span></span>
-<span><span class="co">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
-<span><span class="co">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##               mean se_mean   sd     2.5%      25%      50%      75%    97.5%</span></span>
-<span><span class="co">## mu1[1]        3.88    0.00 0.06     3.75     3.84     3.88     3.92     4.01</span></span>
-<span><span class="co">## sigma1[1]     2.92    0.00 0.05     2.83     2.89     2.92     2.95     3.01</span></span>
-<span><span class="co">## mu2[1]        1.26    0.00 0.03     1.21     1.24     1.26     1.28     1.31</span></span>
-<span><span class="co">## sigma2[1]     1.21    0.00 0.02     1.17     1.20     1.21     1.22     1.25</span></span>
-<span><span class="co">## theta[1]      2.21    0.00 0.06     2.10     2.17     2.21     2.25     2.32</span></span>
-<span><span class="co">## lp__      -6852.44    0.04 1.56 -6856.48 -6853.23 -6852.09 -6851.31 -6850.37</span></span>
-<span><span class="co">##           n_eff Rhat</span></span>
-<span><span class="co">## mu1[1]     2445    1</span></span>
-<span><span class="co">## sigma1[1]  2832    1</span></span>
-<span><span class="co">## mu2[1]     2310    1</span></span>
-<span><span class="co">## sigma2[1]  2669    1</span></span>
-<span><span class="co">## theta[1]   2710    1</span></span>
-<span><span class="co">## lp__       1836    1</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Samples were drawn using NUTS(diag_e) at Tue Jul 16 17:57:18 2024.</span></span>
-<span><span class="co">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
-<span><span class="co">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
-<span><span class="co">## convergence, Rhat=1).</span></span></code></pre>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"joe"</span>, marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span></span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="derivation-of-gaussian-copula-log-likelihood">Derivation of Gaussian Copula Log Likelihood<a class="anchor" aria-label="anchor" href="#derivation-of-gaussian-copula-log-likelihood"></a>
+<h2 id="mathematical-derivations">Mathematical Derivations<a class="anchor" aria-label="anchor" href="#mathematical-derivations"></a>
 </h2>
-<p>Here is a derivation of the Gaussian copula likelihood implemented in
-this package.</p>
+<div class="section level3">
+<h3 id="gaussian-copula-log-likelihood">Gaussian Copula Log-Likelihood<a class="anchor" aria-label="anchor" href="#gaussian-copula-log-likelihood"></a>
+</h3>
 <p><strong>Transformation to Uniform Marginals</strong>:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><msub><mi>F</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>U</mi><mn>2</mn></msub><mo>=</mo><msub><mi>F</mi><mn>2</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 U_1 = F_1(X_1), \quad U_2 = F_2(X_2)
@@ -828,83 +211,53 @@ are the CDFs of the marginals.</p>
 <p><strong>Transformation to Standard Normal</strong>:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>1</mn></msub><mo>=</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>Z</mi><mn>2</mn></msub><mo>=</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 Z_1 = \Phi^{-1}(U_1), \quad Z_2 = \Phi^{-1}(U_2)
-</annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">\Phi^{-1}</annotation></semantics></math>
-is the inverse CDF of the standard normal distribution.</p>
-<p><strong>Bivariate Normal Density</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mi>ρ</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mn>1</mn></msub><mo>,</mo><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi><msqrt><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></msqrt></mrow></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo>−</mo><mn>2</mn><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\phi_{\rho}(z_1, z_2) = \frac{1}{2\pi\sqrt{1-\rho^2}} \exp\left( -\frac{1}{2(1-\rho^2)}(z_1^2 + z_2^2 - 2\rho z_1 z_2) \right)
 </annotation></semantics></math></p>
-<p><strong>Standard Normal Marginal Density</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi></mrow></msqrt></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><msup><mi>z</mi><mn>2</mn></msup><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\phi(z) = \frac{1}{\sqrt{2\pi}} \exp\left( -\frac{z^2}{2} \right)
-</annotation></semantics></math></p>
-<p><strong>Copula Density</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mi>ϕ</mi><mi>ρ</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mn>1</mn></msub><mo>,</mo><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>ϕ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>ϕ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">
-c(u_1, u_2; \rho) = \frac{\phi_{\rho}(z_1, z_2)}{\phi(z_1) \phi(z_2)}
-</annotation></semantics></math> Substituting the expressions for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ϕ</mi><mi>ρ</mi></msub><annotation encoding="application/x-tex">\phi_{\rho}</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi><msqrt><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></msqrt></mrow></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo>−</mo><mn>2</mn><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi></mrow></msqrt></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi></mrow></msqrt></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">
-c(u_1, u_2; \rho) = \frac{\frac{1}{2\pi\sqrt{1-\rho^2}} \exp\left( -\frac{1}{2(1-\rho^2)}(z_1^2 + z_2^2 - 2\rho z_1 z_2) \right)}{\left( \frac{1}{\sqrt{2\pi}} \exp\left( -\frac{z_1^2}{2} \right) \right) \left( \frac{1}{\sqrt{2\pi}} \exp\left( -\frac{z_2^2}{2} \right) \right)}
-</annotation></semantics></math> Simplifying, we get:
+<p><strong>Copula Density</strong> (ratio of bivariate to product of
+univariate normals):
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></msqrt></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo>−</mo><mn>2</mn><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mn>2</mn></mfrac><mo>+</mo><mfrac><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 c(u_1, u_2; \rho) = \frac{1}{\sqrt{1-\rho^2}} \exp\left( -\frac{1}{2(1-\rho^2)}(z_1^2 + z_2^2 - 2\rho z_1 z_2) + \frac{z_1^2}{2} + \frac{z_2^2}{2} \right)
 </annotation></semantics></math></p>
-<p><strong>Log Likelihood</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mrow><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">
-\log c(u_1, u_2; \rho) = -\frac{1}{2} \log(1-\rho^2) + \frac{\rho z_1 z_2 - \rho^2 (z_1^2 + z_2^2)}{2(1-\rho^2)}
+<p><strong>Log-Likelihood</strong>:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mrow><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>ρ</mi><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+\log c(u_1, u_2; \rho) = -\frac{1}{2} \log(1-\rho^2) + \frac{\rho z_1 z_2 - \frac{1}{2}\rho^2 (z_1^2 + z_2^2)}{1-\rho^2}
 </annotation></semantics></math></p>
+</div>
 <div class="section level3">
-<h3 id="derivation-of-clayton-copula-log-likelihood">Derivation of Clayton Copula Log Likelihood<a class="anchor" aria-label="anchor" href="#derivation-of-clayton-copula-log-likelihood"></a>
+<h3 id="clayton-copula-log-likelihood">Clayton Copula Log-Likelihood<a class="anchor" aria-label="anchor" href="#clayton-copula-log-likelihood"></a>
 </h3>
-<p>Here is a derivation of the Clayton copula likelihood implemented in
-this package.</p>
-<p>The Clayton copula is defined as:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac></mrow></msup></mrow><annotation encoding="application/x-tex">
-C(u, v; \theta) = \left(u^{-\theta} + v^{-\theta} - 1\right)^{-\frac{1}{\theta}}
-</annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\theta &gt; 0</annotation></semantics></math>.</p>
-<p>The copula density function
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">c(u, v; \theta)</annotation></semantics></math>
-is obtained by differentiating the copula function:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><msup><mi>∂</mi><mn>2</mn></msup><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>∂</mi><mi>u</mi><mi>∂</mi><mi>v</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">
-c(u, v; \theta) = \frac{\partial^2 C(u, v; \theta)}{\partial u \partial v}
+<p>The Clayton copula CDF:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn><mi>/</mi><mi>θ</mi></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>θ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">
+C(u, v; \theta) = \left(u^{-\theta} + v^{-\theta} - 1\right)^{-1/\theta}, \quad \theta &gt; 0
 </annotation></semantics></math></p>
-<p>First, we differentiate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">C(u, v; \theta)</annotation></semantics></math>
-with respect to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>∂</mi><mi>u</mi></mrow></mfrac><mo>=</mo><mfrac><mi>∂</mi><mrow><mi>∂</mi><mi>u</mi></mrow></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac></mrow></msup></mrow><annotation encoding="application/x-tex">
-\frac{\partial C(u, v; \theta)}{\partial u} = \frac{\partial}{\partial u} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta}}
-</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>1</mn></mrow></msup><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-= -\frac{1}{\theta} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta} - 1} \cdot (-\theta) u^{-\theta - 1}
-</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-= u^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta} - 1}
+<p>The density (second mixed partial derivative):
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn><mi>/</mi><mi>θ</mi><mo>−</mo><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
+c(u, v; \theta) = (\theta + 1) \, u^{-\theta - 1} \, v^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-1/\theta - 2}
 </annotation></semantics></math></p>
-<p>Next, we differentiate the result with respect to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msup><mi>∂</mi><mn>2</mn></msup><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>∂</mi><mi>u</mi><mi>∂</mi><mi>v</mi></mrow></mfrac><mo>=</mo><mfrac><mi>∂</mi><mrow><mi>∂</mi><mi>v</mi></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\frac{\partial^2 C(u, v; \theta)}{\partial u \partial v} = \frac{\partial}{\partial v} \left( u^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta} - 1} \right)
-</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>2</mn></mrow></msup><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-= u^{-\theta - 1} \cdot \left( -\frac{1}{\theta} - 1 \right) \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta} - 2} \cdot (-\theta) v^{-\theta - 1}
-</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-= (\theta + 1) u^{-\theta - 1} v^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta} - 2}
-</annotation></semantics></math></p>
-<p>Therefore, the Clayton copula density function is:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-c(u, v; \theta) = (\theta + 1) u^{-\theta - 1} v^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-\frac{1}{\theta} - 2}
-</annotation></semantics></math></p>
-<p>Taking the natural logarithm, we get the log likelihood:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>u</mi><mo>+</mo><mo>log</mo><mi>v</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\log c(u, v; \theta) = \log(\theta + 1) + (-\theta - 1) (\log u + \log v) + \left( -\frac{1}{\theta} - 2 \right) \log \left( u^{-\theta} + v^{-\theta} - 1 \right)
-</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>u</mi><mo>+</mo><mo>log</mo><mi>v</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mn>2</mn><mi>θ</mi><mo>+</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-= \log(\theta + 1) + (-\theta - 1) (\log u + \log v) - \left( \frac{2\theta + 1}{\theta} \right) \log \left( u^{-\theta} + v^{-\theta} - 1 \right)
-</annotation></semantics></math></p>
-<p>Thus, the log likelihood of the Clayton copula is:
+<p>Log-likelihood:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>u</mi><mo>+</mo><mo>log</mo><mi>v</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mfrac><mrow><mn>2</mn><mi>θ</mi><mo>+</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\log c(u, v; \theta) = \log(1 + \theta) + (-\theta - 1) (\log u + \log v) - \frac{2\theta + 1}{\theta} \log (u^{-\theta} + v^{-\theta} - 1)
+\log c(u, v; \theta) = \log(1 + \theta) + (-\theta - 1)(\log u + \log v) - \frac{2\theta + 1}{\theta} \log(u^{-\theta} + v^{-\theta} - 1)
+</annotation></semantics></math></p>
+</div>
+<div class="section level3">
+<h3 id="joe-copula-log-likelihood">Joe Copula Log-Likelihood<a class="anchor" aria-label="anchor" href="#joe-copula-log-likelihood"></a>
+</h3>
+<p>The Joe copula CDF:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo stretchy="true" form="prefix">[</mo><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><mo>+</mo><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><mo>−</mo><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mn>1</mn><mi>/</mi><mi>θ</mi></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>θ</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+C(u, v; \theta) = 1 - \left[\bar{u}^\theta + \bar{v}^\theta - \bar{u}^\theta \bar{v}^\theta\right]^{1/\theta}, \quad \theta \geq 1
+</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>u</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>1</mn><mo>−</mo><mi>u</mi></mrow><annotation encoding="application/x-tex">\bar{u} = 1-u</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>v</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>1</mn><mo>−</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">\bar{v} = 1-v</annotation></semantics></math>.</p>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup></mrow><annotation encoding="application/x-tex">a = \bar{u}^\theta</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup></mrow><annotation encoding="application/x-tex">b = \bar{v}^\theta</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo>−</mo><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">S = a + b - ab</annotation></semantics></math>.
+The density:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>θ</mi><mspace width="0.167em"></mspace><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><msup><mi>S</mi><mrow><mn>1</mn><mi>/</mi><mi>θ</mi><mo>−</mo><mn>2</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">[</mo><mi>S</mi><mo>+</mo><mfrac><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+c(u, v; \theta) = \theta \, \bar{u}^{\theta-1} \, \bar{v}^{\theta-1} \, S^{1/\theta - 2} \left[ S + \frac{\theta - 1}{\theta}(1 - a)(1 - b) \right]
+</annotation></semantics></math></p>
+<p>Log-likelihood:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>log</mo><mi>θ</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">[</mo><mo>log</mo><mover><mi>u</mi><mo accent="true">‾</mo></mover><mo>+</mo><mo>log</mo><mover><mi>v</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>log</mo><mi>S</mi><mo>+</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">[</mo><mi>S</mi><mo>+</mo><mfrac><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+\log c(u, v; \theta) = \log\theta + (\theta-1)[\log\bar{u} + \log\bar{v}] + \left(\frac{1}{\theta} - 2\right)\log S + \log\left[S + \frac{\theta-1}{\theta}(1-a)(1-b)\right]
 </annotation></semantics></math></p>
 </div>
 </div>
@@ -919,7 +272,7 @@ c(u, v; \theta) = (\theta + 1) u^{-\theta - 1} v^{-\theta - 1} \left( u^{-\theta
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

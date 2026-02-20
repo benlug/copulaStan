@@ -8,11 +8,11 @@
 <title>Fit Bivariate Gaussian and Clayton Copula Models Using Stan • copulaStan</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Fit Bivariate Gaussian and Clayton Copula Models Using Stan">
-<meta name="description" content="Provides Stan wrapper functions to fit bivariate Gaussian and Clayton copula models.">
-<meta property="og:description" content="Provides Stan wrapper functions to fit bivariate Gaussian and Clayton copula models.">
+<meta name="description" content="Provides Stan wrapper functions to fit bivariate Gaussian, Clayton, and Joe copula models with flexible marginal distributions. Models are pre-compiled using CmdStan via the instantiate package for fast sampling.">
+<meta property="og:description" content="Provides Stan wrapper functions to fit bivariate Gaussian, Clayton, and Joe copula models with flexible marginal distributions. Models are pre-compiled using CmdStan via the instantiate package for fast sampling.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">copulaStan</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/copulaStan-intro.html">copulaStan: Fitting Bivariate Gaussian and Clayton Copulas</a></li>
+<li><a class="dropdown-item" href="articles/copulaStan-intro.html">copulaStan: Fitting Bivariate Copula Models</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -52,59 +52,66 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="copulastan-">copulaStan <a href="%5Bhttps://github.com/benlug/copulaStan/blob/main/man/figures/copulaStan_hex.png%5D(https://benlug.github.io/copulaStan/)"><img src="reference/figures/copulaStan_hex.png" align="right" width="15%" height="15%" alt="copulaStan Logo"></a>
+<div class="page-header"><h1 id="copulastan-">copulaStan <a href="https://benlug.github.io/copulaStan/"><img src="reference/figures/copulaStan_hex.png" align="right" width="15%" height="15%" alt="copulaStan Logo"></a>
 <a class="anchor" aria-label="anchor" href="#copulastan-"></a>
 </h1></div>
-<p>The <code>copulaStan</code> package provides functions to fit bivariate Gaussian and Clayton copula models using Stan. These models can handle both normal and non-normal marginals.</p>
+<!-- badges: start -->
+
+<p>The <code>copulaStan</code> package fits bivariate Gaussian, Clayton, and Joe copula models using Stan. It supports normal, lognormal, exponential, and beta marginal distributions with full Bayesian inference via <code>cmdstanr</code>.</p>
+<div class="section level2">
+<h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
+</h2>
+<p><code>copulaStan</code> requires <a href="https://mc-stan.org/cmdstanr/" class="external-link">CmdStan</a> to be installed:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmdstanr"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://stan-dev.r-universe.dev"</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"repos"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">cmdstanr</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/install_cmdstan.html" class="external-link">install_cmdstan</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <code>copulaStan</code> from <a href="https://github.com/benlug/copulaStan" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<p>Install the development version from <a href="https://github.com/benlug/copulaStan" class="external-link">GitHub</a>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"benlug/copulaStan"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to fit a bivariate Gaussian copula model:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://copula.r-forge.r-project.org/" class="external-link">copula</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://benlug.github.io/copulaStan/">copulaStan</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">true_rho</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
-<span></span>
-<span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/ellipCopula.html" class="external-link">normalCopula</a></span><span class="op">(</span>param <span class="op">=</span> <span class="va">true_rho</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
-<span><span class="va">U</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">U</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"gaussian"</span>, marginals <span class="op">=</span> <span class="va">margins</span>, </span>
-<span>                            seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">fit</span></span></code></pre></div>
-<p>And an example for fitting a bivariate Clayton copula model:</p>
+<p>Fit a bivariate Gaussian copula model with normal and lognormal marginals:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://copula.r-forge.r-project.org/" class="external-link">copula</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://benlug.github.io/copulaStan/">copulaStan</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
-<span><span class="va">true_theta</span> <span class="op">&lt;-</span> <span class="fl">2.0</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2000</span>  </span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/ellipCopula.html" class="external-link">normalCopula</a></span><span class="op">(</span>param <span class="op">=</span> <span class="fl">0.5</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"lnorm"</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>meanlog <span class="op">=</span> <span class="fl">0</span>, sdlog <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/archmCopula.html" class="external-link">claytonCopula</a></span><span class="op">(</span>param <span class="op">=</span> <span class="va">true_theta</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>meanlog <span class="op">=</span> <span class="fl">0</span>, sdlog <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                            copula <span class="op">=</span> <span class="st">"clayton"</span>, marginals <span class="op">=</span> <span class="va">margins</span>,</span>
-<span>                            seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
+<span>  marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p>Fit a Clayton copula:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/archmCopula.html" class="external-link">claytonCopula</a></span><span class="op">(</span>param <span class="op">=</span> <span class="fl">2.0</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"lnorm"</span><span class="op">)</span></span>
+<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>meanlog <span class="op">=</span> <span class="fl">0</span>, sdlog <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>  copula <span class="op">=</span> <span class="st">"clayton"</span>,</span>
+<span>  marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">fit</span></span></code></pre></div>
 </div>
 </div>
@@ -127,11 +134,16 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Benedikt Lugauer <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Benedikt Lugauer <br><small class="roles"> Author, maintainer </small>   </li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/benlug/copulaStan/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/benlug/copulaStan/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
@@ -142,7 +154,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
