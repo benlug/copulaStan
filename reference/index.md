@@ -2,14 +2,16 @@
 
 ## Fitting Models
 
-Main function for fitting bivariate copula models.
+The main function for specifying and fitting bivariate copula models
+with flexible marginal distributions.
 
 - [`fit_bivariate_copula()`](https://benlug.github.io/copulaStan/reference/fit_bivariate_copula.md)
   : Fit Bivariate Copula Model
 
 ## Working with Results
 
-S3 methods for inspecting and extracting results from fitted models.
+S3 methods for inspecting fitted models, extracting posterior summaries,
+and obtaining point estimates.
 
 - [`print(`*`<copula_fit>`*`)`](https://benlug.github.io/copulaStan/reference/print.copula_fit.md)
   : Print a copula_fit object
@@ -20,7 +22,8 @@ S3 methods for inspecting and extracting results from fitted models.
 
 ## Internals
 
-Internal constructor and utilities (not intended for direct use).
+Internal constructor and utilities. These are documented for
+transparency but are not intended for direct use.
 
 - [`copula_fit()`](https://benlug.github.io/copulaStan/reference/copula_fit.md)
   : Create a copula_fit object

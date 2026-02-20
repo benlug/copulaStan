@@ -5,22 +5,29 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>copulaStan: Bivariate Copula Models with Stan • copulaStan</title>
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>copulaStan: Bayesian Bivariate Copula Models with Stan • copulaStan</title>
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="copulaStan: Bivariate Copula Models with Stan">
-<meta name="description" content="Fit bivariate Gaussian, Clayton, and Joe copula models with flexible marginal distributions using Bayesian inference via CmdStan.
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="copulaStan: Bayesian Bivariate Copula Models with Stan">
+<meta name="description" content="Fit bivariate Gaussian, Clayton, and Joe copula models with flexible marginal distributions using full Bayesian inference via CmdStan.
 ">
-<meta property="og:description" content="Fit bivariate Gaussian, Clayton, and Joe copula models with flexible marginal distributions using Bayesian inference via CmdStan.
+<meta property="og:description" content="Fit bivariate Gaussian, Clayton, and Joe copula models with flexible marginal distributions using full Bayesian inference via CmdStan.
 ">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">copulaStan</a>
 
@@ -38,7 +45,18 @@
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+</form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/benlug/copulaStan" aria-label="GitHub"><span class="fa fa-github"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -52,69 +70,115 @@
 </h1></div>
 <!-- badges: start -->
 
+<p><strong>copulaStan</strong> fits bivariate copula models with full Bayesian inference via <a href="https://mc-stan.org/" class="external-link">Stan</a>. It jointly estimates the copula dependence parameter and marginal distribution parameters, returning posterior draws for uncertainty quantification and model comparison.</p>
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="why-copulastan">Why copulaStan?<a class="anchor" aria-label="anchor" href="#why-copulastan"></a>
 </h2>
-<p>Copulas are functions that describe the dependence structure between random variables, separately from their marginal distributions. This separation makes them a flexible tool for modeling multivariate data with non-standard dependencies.</p>
-<p><code>copulaStan</code> fits bivariate copula models with full Bayesian inference via <a href="https://mc-stan.org/" class="external-link">Stan</a>. It jointly estimates the copula dependence parameter and marginal distribution parameters, returning posterior draws for uncertainty quantification and model comparison.</p>
+<p>Copulas separate the modeling of marginal distributions from the modeling of dependence. This lets you choose the best-fitting distribution for each variable independently, then capture how the variables relate through a copula function – without restrictive joint distribution assumptions.</p>
+<p><strong>copulaStan</strong> makes this approach accessible in R with:</p>
+<ul>
+<li>
+<strong>Full Bayesian inference</strong> – posterior distributions for all parameters, not just point estimates</li>
+<li>
+<strong>Flexible marginals</strong> – mix and match Normal, Lognormal, Exponential, and Beta distributions</li>
+<li>
+<strong>Multiple copula families</strong> – Gaussian, Clayton, and Joe copulas for different dependence structures</li>
+<li>
+<strong>Built-in diagnostics</strong> – Rhat, ESS, and pointwise log-likelihoods for LOO-CV model comparison</li>
+<li>
+<strong>Modern Stan backend</strong> – powered by CmdStan via cmdstanr for fast, reliable sampling</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="supported-models">Supported Models<a class="anchor" aria-label="anchor" href="#supported-models"></a>
 </h2>
+<div class="section level3">
+<h3 id="copula-families">Copula Families<a class="anchor" aria-label="anchor" href="#copula-families"></a>
+</h3>
 <table class="table">
 <thead><tr class="header">
 <th>Copula</th>
-<th>Dependence parameter</th>
-<th>Dependence structure</th>
+<th>Parameter</th>
+<th>Constraint</th>
+<th>Dependence Structure</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>Gaussian</td>
-<td>
-<code>rho</code> in (-1, 1)</td>
+<td><code>rho</code></td>
+<td>(-1, 1)</td>
 <td>Symmetric, no tail dependence</td>
 </tr>
 <tr class="even">
 <td>Clayton</td>
-<td>
-<code>theta</code> &gt; 0</td>
+<td><code>theta</code></td>
+<td>&gt; 0</td>
 <td>Lower tail dependence</td>
 </tr>
 <tr class="odd">
 <td>Joe</td>
-<td>
-<code>theta</code> &gt;= 1</td>
+<td><code>theta</code></td>
+<td>&gt;= 1</td>
 <td>Upper tail dependence</td>
 </tr>
 </tbody>
 </table>
-<p>Each marginal can be independently set to one of:</p>
-<ul>
-<li>
-<strong>Normal</strong> – parameters: <code>mu</code>, <code>sigma</code>
-</li>
-<li>
-<strong>Lognormal</strong> – parameters: <code>mu</code>, <code>sigma</code> (data must be positive)</li>
-<li>
-<strong>Exponential</strong> – parameter: <code>lambda</code> (data must be positive)</li>
-<li>
-<strong>Beta</strong> – parameters: <code>alpha</code>, <code>beta</code> (data must be in (0, 1))</li>
-</ul>
+</div>
+<div class="section level3">
+<h3 id="marginal-distributions">Marginal Distributions<a class="anchor" aria-label="anchor" href="#marginal-distributions"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Distribution</th>
+<th>Parameters</th>
+<th>Data Constraint</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Normal</td>
+<td>
+<code>mu</code>, <code>sigma</code>
+</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>Lognormal</td>
+<td>
+<code>mu</code>, <code>sigma</code>
+</td>
+<td>Data must be positive</td>
+</tr>
+<tr class="odd">
+<td>Exponential</td>
+<td><code>lambda</code></td>
+<td>Data must be positive</td>
+</tr>
+<tr class="even">
+<td>Beta</td>
+<td>
+<code>alpha</code>, <code>beta</code>
+</td>
+<td>Data must be in (0, 1)</td>
+</tr>
+</tbody>
+</table>
+<p>Each marginal can be set independently, giving 4 x 4 = 16 possible marginal combinations per copula family.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><code>copulaStan</code> requires <a href="https://mc-stan.org/cmdstanr/" class="external-link">CmdStan</a>. Install it first if you have not already:</p>
+<p><strong>copulaStan</strong> requires <a href="https://mc-stan.org/cmdstanr/" class="external-link">CmdStan</a>. Install it first if you have not already:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmdstanr"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://stan-dev.r-universe.dev"</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"repos"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">cmdstanr</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/install_cmdstan.html" class="external-link">install_cmdstan</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Then install <code>copulaStan</code> from GitHub:</p>
+<p>Then install <strong>copulaStan</strong> from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"benlug/copulaStan"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <p>Simulate data from a Gaussian copula with normal and lognormal marginals, then recover the parameters:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -153,27 +217,38 @@
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     mu1[1]  sigma1[1]     mu2[1]  sigma2[1]     rho[1]</span></span>
 <span><span class="co">#&gt;      0.024      1.005      0.014      0.812      0.481</span></span></code></pre></div>
-<p>Fit a Clayton copula instead:</p>
+<p>Try a different copula family:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/archmCopula.html" class="external-link">claytonCopula</a></span><span class="op">(</span>param <span class="op">=</span> <span class="fl">2.0</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">mvdc_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span><span class="va">cop</span>, margins <span class="op">=</span> <span class="va">margins</span>, paramMargins <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">rMvdc</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="va">mvdc_copula</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<code class="sourceCode R"><span><span class="co"># Clayton copula for lower tail dependence</span></span>
+<span><span class="va">fit_clay</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_bivariate_copula.html">fit_bivariate_copula</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>  copula <span class="op">=</span> <span class="st">"clayton"</span>,</span>
 <span>  marginals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"lognormal"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          mu1[1]       sigma1[1]          mu2[1]       sigma2[1] theta_clayton[1]</span></span>
-<span><span class="co">#&gt;           0.006           0.998          -0.001           0.797            2.032</span></span></code></pre></div>
+<span></span>
+<span><span class="co"># Compare models via LOO-CV</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/loo/" class="external-link">loo</a></span><span class="op">)</span></span>
+<span><span class="va">loo_gauss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="fu">draws</span><span class="op">(</span><span class="st">"log_lik"</span>, format <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">loo_clay</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">fit_clay</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="fu">draws</span><span class="op">(</span><span class="st">"log_lik"</span>, format <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="va">loo_gauss</span>, <span class="va">loo_clay</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="learning-more">Learning More<a class="anchor" aria-label="anchor" href="#learning-more"></a>
+</h2>
+<ul>
+<li>
+<strong><a href="https://benlug.github.io/copulaStan/articles/copulaStan-intro.html">Get Started</a></strong> – a comprehensive introduction with examples for all copula families, diagnostics, and prior specification.</li>
+<li>
+<strong><a href="https://benlug.github.io/copulaStan/reference/index.html">Function Reference</a></strong> – complete documentation for all exported functions and methods.</li>
+<li>
+<strong><a href="https://benlug.github.io/copulaStan/news/index.html">Changelog</a></strong> – version history and release notes.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
 </h2>
 <ul>
-<li>Browse the <a href="https://benlug.github.io/copulaStan/">pkgdown site</a> for full documentation and the introductory vignette.</li>
+<li>Browse the <a href="https://benlug.github.io/copulaStan/">package website</a> for documentation and vignettes.</li>
 <li>Report bugs or request features on <a href="https://github.com/benlug/copulaStan/issues" class="external-link">GitHub Issues</a>.</li>
 </ul>
 </div>
@@ -213,6 +288,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/benlug/copulaStan/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/benlug/copulaStan/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
 

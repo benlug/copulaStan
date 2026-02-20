@@ -1,4 +1,4 @@
-# copulaStan: Fitting Bivariate Copula Models
+# Getting Started with copulaStan
 
 ## Introduction
 
@@ -8,18 +8,16 @@ distribution. For example, insurance claim amounts might be lognormally
 distributed while waiting times are exponential, yet the two are clearly
 not independent.
 
-**Copulas** solve this problem by separating the modeling of marginal
-distributions from the modeling of dependence. A copula is a function
-that links univariate marginal distributions into a joint multivariate
-distribution. This means you can choose the best-fitting distribution
-for each variable independently, and then choose a copula to describe
-how the variables are related.
+**Copulas** solve this by separating the modeling of marginal
+distributions from the modeling of dependence. A copula links univariate
+marginal distributions into a joint multivariate distribution, so you
+can choose the best-fitting distribution for each variable independently
+and then choose a copula to describe how the variables relate.
 
-The `copulaStan` package fits bivariate copula models using Stan, a
-state-of-the-art platform for Bayesian inference. It jointly estimates
-all parameters – both the marginal distribution parameters and the
-copula dependence parameter – and returns full posterior distributions
-for uncertainty quantification.
+`copulaStan` fits bivariate copula models using Stan for full Bayesian
+inference. It jointly estimates all parameters – both the marginal
+distribution parameters and the copula dependence parameter – and
+returns posterior distributions for uncertainty quantification.
 
 ``` r
 library(copulaStan)
@@ -31,31 +29,34 @@ library(copula)
 The package supports three copula families, each suited to different
 dependence patterns:
 
-- **Gaussian copula** (`copula = "gaussian"`): Models symmetric
-  dependence without tail dependence. Use this when variables are
-  correlated but extreme events in one variable do not make extreme
-  events in the other more likely. The dependence parameter `rho` ranges
-  from -1 to 1, analogous to a correlation coefficient.
+### Gaussian Copula
 
-- **Clayton copula** (`copula = "clayton"`): Models lower tail
-  dependence – the tendency for small values to cluster together more
-  strongly than large values. Use this for phenomena like joint defaults
-  in credit risk or co-occurring low returns in finance. The dependence
-  parameter `theta` is positive; larger values indicate stronger
-  lower-tail dependence.
+Use `copula = "gaussian"` for symmetric dependence without tail
+dependence. Variables are correlated, but extreme events in one variable
+do not make extreme events in the other more likely. The dependence
+parameter `rho` ranges from -1 to 1, analogous to a correlation
+coefficient.
 
-- **Joe copula** (`copula = "joe"`): Models upper tail dependence – the
-  tendency for large values to co-occur. Use this when extreme high
-  values in one variable make extreme high values in the other more
-  likely, such as joint insurance claims during catastrophic events. The
-  dependence parameter `theta` is at least 1; larger values indicate
-  stronger upper-tail dependence.
+### Clayton Copula
+
+Use `copula = "clayton"` for **lower tail dependence** – the tendency
+for small values to cluster together more strongly than large values.
+Useful for phenomena like joint defaults in credit risk or co-occurring
+low returns in finance. The dependence parameter `theta` is positive;
+larger values indicate stronger lower-tail dependence.
+
+### Joe Copula
+
+Use `copula = "joe"` for **upper tail dependence** – the tendency for
+large values to co-occur. Useful when extreme high values in one
+variable make extreme high values in the other more likely, such as
+joint insurance claims during catastrophic events. The dependence
+parameter `theta` is at least 1; larger values indicate stronger
+upper-tail dependence.
 
 ## Examples
 
-### Gaussian Copula
-
-#### Normal + Lognormal Marginals
+### Gaussian Copula with Normal + Lognormal Marginals
 
 ``` r
 seed <- 2024
@@ -102,7 +103,7 @@ coef(fit)
 #>      0.840      1.982      0.003      0.796      0.501
 ```
 
-#### Normal + Exponential Marginals
+### Gaussian Copula with Normal + Exponential Marginals
 
 ``` r
 seed <- 2024
@@ -138,7 +139,7 @@ coef(fit)
 #>      0.818      1.987      1.004      0.497
 ```
 
-#### Beta + Beta Marginals
+### Gaussian Copula with Beta + Beta Marginals
 
 ``` r
 seed <- 2024
@@ -175,9 +176,7 @@ coef(fit)
 #>      2.030      5.065      3.018      4.025      0.498
 ```
 
-### Clayton Copula
-
-#### Normal + Lognormal Marginals
+### Clayton Copula with Normal + Lognormal Marginals
 
 ``` r
 seed <- 2024
@@ -214,9 +213,7 @@ coef(fit)
 #>           0.798           1.986           0.005           0.799            2.015
 ```
 
-### Joe Copula
-
-#### Normal + Lognormal Marginals
+### Joe Copula with Normal + Lognormal Marginals
 
 ``` r
 seed <- 2024
@@ -255,25 +252,27 @@ coef(fit)
 
 ## Model Diagnostics
 
-After fitting a model, check the following diagnostics to ensure the
-results are reliable.
+After fitting a model, check these diagnostics to ensure reliable
+results.
 
-### Rhat and Effective Sample Size
+### Convergence: Rhat and Effective Sample Size
 
 The [`summary()`](https://rdrr.io/r/base/summary.html) output includes
-`rhat`, `ess_bulk`, and `ess_tail` for each parameter. These are
-computed by the `posterior` package.
+`rhat`, `ess_bulk`, and `ess_tail` for each parameter, computed by the
+`posterior` package.
 
-- **Rhat** should be close to 1.00 (below 1.01) for all parameters.
-  Values above 1.01 suggest the chains have not converged.
+- **Rhat** should be below 1.01 for all parameters. Values above 1.01
+  suggest the chains have not converged.
 - **ess_bulk** and **ess_tail** report the effective sample size for
-  bulk and tail quantities of the posterior. As a rule of thumb, aim for
-  at least 400 effective samples per parameter.
+  bulk and tail quantities of the posterior. Aim for at least 400
+  effective samples per parameter.
 
 ``` r
 summ <- summary(fit)
+
 # Check convergence
 all(summ$rhat < 1.01)
+
 # Check effective sample sizes
 all(summ$ess_bulk > 400)
 ```
@@ -292,14 +291,14 @@ fit <- fit_bivariate_copula(data,
 ```
 
 If divergences persist at `adapt_delta = 0.99`, this may indicate a
-fundamental model-data mismatch (for example, using a Clayton copula for
-data with upper tail dependence).
+model-data mismatch (for example, using a Clayton copula for data with
+upper tail dependence).
 
 ### Model Comparison with LOO-CV
 
 The model stores pointwise log-likelihoods (`log_lik`) in the generated
-quantities block. You can use these with the `loo` package to compare
-copula models via approximate leave-one-out cross-validation:
+quantities block. Use these with the `loo` package for approximate
+leave-one-out cross-validation:
 
 ``` r
 library(loo)
@@ -323,14 +322,13 @@ preferred.
 
 ## Prior Specification
 
-The Stan model uses the following default priors. These are weakly
-informative and designed to regularize estimation without strongly
-constraining the posterior.
+The Stan model uses weakly informative default priors designed to
+regularize estimation without strongly constraining the posterior.
 
-**Marginal distribution priors:**
+### Marginal Distribution Priors
 
 | Distribution | Parameter | Prior           | Notes                             |
-|--------------|-----------|-----------------|-----------------------------------|
+|:-------------|:----------|:----------------|:----------------------------------|
 | Normal       | `mu`      | Normal(0, 5)    | Weakly informative location prior |
 | Normal       | `sigma`   | Lognormal(0, 1) | Positive-constrained; median = 1  |
 | Lognormal    | `mu`      | Normal(0, 5)    | Weakly informative location prior |
@@ -339,56 +337,65 @@ constraining the posterior.
 | Beta         | `alpha`   | Gamma(2, 0.5)   | Positive; mean = 4                |
 | Beta         | `beta`    | Gamma(2, 0.5)   | Positive; mean = 4                |
 
-**Copula dependence parameter priors:**
+### Copula Dependence Parameter Priors
 
 | Copula   | Parameter       | Prior                  | Notes                            |
-|----------|-----------------|------------------------|----------------------------------|
+|:---------|:----------------|:-----------------------|:---------------------------------|
 | Gaussian | `rho`           | Uniform(-1, 1)         | Flat prior on the correlation    |
 | Clayton  | `theta_clayton` | Lognormal(0, 1)        | Positive-constrained; median = 1 |
 | Joe      | `theta_joe`     | Lognormal(log(2), 0.5) | Lower-bounded at 1; median = 2   |
 
-Custom priors are not currently supported through the R interface. If
-you need different priors, you can modify the Stan model file directly
-(located in `inst/stan/fit_bivariate_copula.stan`).
+Custom priors are not currently supported through the R interface. To
+use different priors, modify the Stan model file directly at
+`inst/stan/fit_bivariate_copula.stan`.
 
-## Mathematical Derivations
+## Mathematical Details
 
-### Gaussian Copula Log-Likelihood
+### Gaussian Copula
 
-**Transformation to Uniform Marginals**:
-$$U_{1} = F_{1}\left( X_{1} \right),\quad U_{2} = F_{2}\left( X_{2} \right)$$
-where $F_{1}$ and $F_{2}$ are the CDFs of the marginals.
+**Transformation to uniform marginals:** \\U_1 = F_1(X_1), \quad U_2 =
+F_2(X_2)\\
 
-**Transformation to Standard Normal**:
-$$Z_{1} = \Phi^{- 1}\left( U_{1} \right),\quad Z_{2} = \Phi^{- 1}\left( U_{2} \right)$$
+where \\F_1\\ and \\F_2\\ are the marginal CDFs.
 
-**Copula Density** (ratio of bivariate to product of univariate
-normals):
-$$c\left( u_{1},u_{2};\rho \right) = \frac{1}{\sqrt{1 - \rho^{2}}}\exp\left( - \frac{1}{2\left( 1 - \rho^{2} \right)}\left( z_{1}^{2} + z_{2}^{2} - 2\rho z_{1}z_{2} \right) + \frac{z_{1}^{2}}{2} + \frac{z_{2}^{2}}{2} \right)$$
+**Transformation to standard normal:** \\Z_1 = \Phi^{-1}(U_1), \quad Z_2
+= \Phi^{-1}(U_2)\\
 
-**Log-Likelihood**:
-$$\log c\left( u_{1},u_{2};\rho \right) = - \frac{1}{2}\log\left( 1 - \rho^{2} \right) + \frac{\rho z_{1}z_{2} - \frac{1}{2}\rho^{2}\left( z_{1}^{2} + z_{2}^{2} \right)}{1 - \rho^{2}}$$
+**Copula density** (ratio of bivariate to product of univariate
+normals): \\c(u_1, u_2; \rho) = \frac{1}{\sqrt{1-\rho^2}} \exp\left(
+-\frac{1}{2(1-\rho^2)}(z_1^2 + z_2^2 - 2\rho z_1 z_2) +
+\frac{z_1^2}{2} + \frac{z_2^2}{2} \right)\\
 
-### Clayton Copula Log-Likelihood
+**Log-likelihood:** \\\log c(u_1, u_2; \rho) = -\frac{1}{2}
+\log(1-\rho^2) + \frac{\rho z_1 z_2 - \frac{1}{2}\rho^2 (z_1^2 +
+z_2^2)}{1-\rho^2}\\
 
-The Clayton copula CDF:
-$$C(u,v;\theta) = \left( u^{- \theta} + v^{- \theta} - 1 \right)^{- 1/\theta},\quad\theta > 0$$
+### Clayton Copula
 
-The density (second mixed partial derivative):
-$$c(u,v;\theta) = (\theta + 1)\, u^{- \theta - 1}\, v^{- \theta - 1}\left( u^{- \theta} + v^{- \theta} - 1 \right)^{- 1/\theta - 2}$$
+**CDF:** \\C(u, v; \theta) = \left(u^{-\theta} + v^{-\theta} -
+1\right)^{-1/\theta}, \quad \theta \> 0\\
 
-Log-likelihood:
-$$\log c(u,v;\theta) = \log(1 + \theta) + ( - \theta - 1)\left( \log u + \log v \right) - \frac{2\theta + 1}{\theta}\log\left( u^{- \theta} + v^{- \theta} - 1 \right)$$
+**Density** (second mixed partial derivative): \\c(u, v; \theta) =
+(\theta + 1) \\ u^{-\theta - 1} \\ v^{-\theta - 1} \left( u^{-\theta} +
+v^{-\theta} - 1 \right)^{-1/\theta - 2}\\
 
-### Joe Copula Log-Likelihood
+**Log-likelihood:** \\\log c(u, v; \theta) = \log(1 + \theta) +
+(-\theta - 1)(\log u + \log v) - \frac{2\theta + 1}{\theta}
+\log(u^{-\theta} + v^{-\theta} - 1)\\
 
-The Joe copula CDF:
-$$C(u,v;\theta) = 1 - \left\lbrack {\bar{u}}^{\theta} + {\bar{v}}^{\theta} - {\bar{u}}^{\theta}{\bar{v}}^{\theta} \right\rbrack^{1/\theta},\quad\theta \geq 1$$
-where $\bar{u} = 1 - u$, $\bar{v} = 1 - v$.
+### Joe Copula
 
-Let $a = {\bar{u}}^{\theta}$, $b = {\bar{v}}^{\theta}$,
-$S = a + b - ab$. The density:
-$$c(u,v;\theta) = \theta\,{\bar{u}}^{\theta - 1}\,{\bar{v}}^{\theta - 1}\, S^{1/\theta - 2}\left\lbrack S + \frac{\theta - 1}{\theta}(1 - a)(1 - b) \right\rbrack$$
+**CDF** where \\\bar{u} = 1-u\\, \\\bar{v} = 1-v\\: \\C(u, v; \theta) =
+1 - \left\[\bar{u}^\theta + \bar{v}^\theta - \bar{u}^\theta
+\bar{v}^\theta\right\]^{1/\theta}, \quad \theta \geq 1\\
 
-Log-likelihood:
-$$\log c(u,v;\theta) = \log\theta + (\theta - 1)\left\lbrack \log\bar{u} + \log\bar{v} \right\rbrack + \left( \frac{1}{\theta} - 2 \right)\log S + \log\left\lbrack S + \frac{\theta - 1}{\theta}(1 - a)(1 - b) \right\rbrack$$
+Let \\a = \bar{u}^\theta\\, \\b = \bar{v}^\theta\\, \\S = a + b - ab\\.
+
+**Density:** \\c(u, v; \theta) = \theta \\ \bar{u}^{\theta-1} \\
+\bar{v}^{\theta-1} \\ S^{1/\theta - 2} \left\[ S + \frac{\theta -
+1}{\theta}(1 - a)(1 - b) \right\]\\
+
+**Log-likelihood:** \\\log c(u, v; \theta) = \log\theta +
+(\theta-1)\[\log\bar{u} + \log\bar{v}\] + \left(\frac{1}{\theta} -
+2\right)\log S + \log\left\[S +
+\frac{\theta-1}{\theta}(1-a)(1-b)\right\]\\

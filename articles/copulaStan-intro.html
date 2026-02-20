@@ -5,18 +5,25 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>copulaStan: Fitting Bivariate Copula Models • copulaStan</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Getting Started with copulaStan • copulaStan</title>
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="copulaStan: Fitting Bivariate Copula Models">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Getting Started with copulaStan">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">copulaStan</a>
 
@@ -34,7 +41,18 @@
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/benlug/copulaStan" aria-label="GitHub"><span class="fa fa-github"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -48,7 +66,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>copulaStan: Fitting Bivariate Copula Models</h1>
+      <h1>Getting Started with copulaStan</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/benlug/copulaStan/blob/main/vignettes/copulaStan-intro.Rmd" class="external-link"><code>vignettes/copulaStan-intro.Rmd</code></a></small>
@@ -65,17 +83,16 @@ dependence between variables while allowing each variable to follow its
 own distribution. For example, insurance claim amounts might be
 lognormally distributed while waiting times are exponential, yet the two
 are clearly not independent.</p>
-<p><strong>Copulas</strong> solve this problem by separating the
-modeling of marginal distributions from the modeling of dependence. A
-copula is a function that links univariate marginal distributions into a
-joint multivariate distribution. This means you can choose the
-best-fitting distribution for each variable independently, and then
-choose a copula to describe how the variables are related.</p>
-<p>The <code>copulaStan</code> package fits bivariate copula models
-using Stan, a state-of-the-art platform for Bayesian inference. It
-jointly estimates all parameters – both the marginal distribution
-parameters and the copula dependence parameter – and returns full
-posterior distributions for uncertainty quantification.</p>
+<p><strong>Copulas</strong> solve this by separating the modeling of
+marginal distributions from the modeling of dependence. A copula links
+univariate marginal distributions into a joint multivariate
+distribution, so you can choose the best-fitting distribution for each
+variable independently and then choose a copula to describe how the
+variables relate.</p>
+<p><code>copulaStan</code> fits bivariate copula models using Stan for
+full Bayesian inference. It jointly estimates all parameters – both the
+marginal distribution parameters and the copula dependence parameter –
+and returns posterior distributions for uncertainty quantification.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://benlug.github.io/copulaStan/">copulaStan</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://copula.r-forge.r-project.org/" class="external-link">copula</a></span><span class="op">)</span></span></code></pre></div>
@@ -85,37 +102,42 @@ posterior distributions for uncertainty quantification.</p>
 </h2>
 <p>The package supports three copula families, each suited to different
 dependence patterns:</p>
-<ul>
-<li><p><strong>Gaussian copula</strong>
-(<code>copula = "gaussian"</code>): Models symmetric dependence without
-tail dependence. Use this when variables are correlated but extreme
-events in one variable do not make extreme events in the other more
-likely. The dependence parameter <code>rho</code> ranges from -1 to 1,
-analogous to a correlation coefficient.</p></li>
-<li><p><strong>Clayton copula</strong>
-(<code>copula = "clayton"</code>): Models lower tail dependence – the
-tendency for small values to cluster together more strongly than large
-values. Use this for phenomena like joint defaults in credit risk or
-co-occurring low returns in finance. The dependence parameter
-<code>theta</code> is positive; larger values indicate stronger
-lower-tail dependence.</p></li>
-<li><p><strong>Joe copula</strong> (<code>copula = "joe"</code>): Models
-upper tail dependence – the tendency for large values to co-occur. Use
-this when extreme high values in one variable make extreme high values
-in the other more likely, such as joint insurance claims during
-catastrophic events. The dependence parameter <code>theta</code> is at
-least 1; larger values indicate stronger upper-tail dependence.</p></li>
-</ul>
+<div class="section level3">
+<h3 id="gaussian-copula">Gaussian Copula<a class="anchor" aria-label="anchor" href="#gaussian-copula"></a>
+</h3>
+<p>Use <code>copula = "gaussian"</code> for symmetric dependence without
+tail dependence. Variables are correlated, but extreme events in one
+variable do not make extreme events in the other more likely. The
+dependence parameter <code>rho</code> ranges from -1 to 1, analogous to
+a correlation coefficient.</p>
+</div>
+<div class="section level3">
+<h3 id="clayton-copula">Clayton Copula<a class="anchor" aria-label="anchor" href="#clayton-copula"></a>
+</h3>
+<p>Use <code>copula = "clayton"</code> for <strong>lower tail
+dependence</strong> – the tendency for small values to cluster together
+more strongly than large values. Useful for phenomena like joint
+defaults in credit risk or co-occurring low returns in finance. The
+dependence parameter <code>theta</code> is positive; larger values
+indicate stronger lower-tail dependence.</p>
+</div>
+<div class="section level3">
+<h3 id="joe-copula">Joe Copula<a class="anchor" aria-label="anchor" href="#joe-copula"></a>
+</h3>
+<p>Use <code>copula = "joe"</code> for <strong>upper tail
+dependence</strong> – the tendency for large values to co-occur. Useful
+when extreme high values in one variable make extreme high values in the
+other more likely, such as joint insurance claims during catastrophic
+events. The dependence parameter <code>theta</code> is at least 1;
+larger values indicate stronger upper-tail dependence.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <div class="section level3">
-<h3 id="gaussian-copula">Gaussian Copula<a class="anchor" aria-label="anchor" href="#gaussian-copula"></a>
+<h3 id="gaussian-copula-with-normal-lognormal-marginals">Gaussian Copula with Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#gaussian-copula-with-normal-lognormal-marginals"></a>
 </h3>
-<div class="section level4">
-<h4 id="normal-lognormal-marginals">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals"></a>
-</h4>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
@@ -160,9 +182,9 @@ least 1; larger values indicate stronger upper-tail dependence.</p></li>
 <span><span class="co">#&gt;     mu1[1]  sigma1[1]     mu2[1]  sigma2[1]     rho[1]</span></span>
 <span><span class="co">#&gt;      0.840      1.982      0.003      0.796      0.501</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="normal-exponential-marginals">Normal + Exponential Marginals<a class="anchor" aria-label="anchor" href="#normal-exponential-marginals"></a>
-</h4>
+<div class="section level3">
+<h3 id="gaussian-copula-with-normal-exponential-marginals">Gaussian Copula with Normal + Exponential Marginals<a class="anchor" aria-label="anchor" href="#gaussian-copula-with-normal-exponential-marginals"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
@@ -196,9 +218,9 @@ least 1; larger values indicate stronger upper-tail dependence.</p></li>
 <span><span class="co">#&gt;     mu1[1]  sigma1[1] lambda2[1]     rho[1]</span></span>
 <span><span class="co">#&gt;      0.818      1.987      1.004      0.497</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="beta-beta-marginals">Beta + Beta Marginals<a class="anchor" aria-label="anchor" href="#beta-beta-marginals"></a>
-</h4>
+<div class="section level3">
+<h3 id="gaussian-copula-with-beta-beta-marginals">Gaussian Copula with Beta + Beta Marginals<a class="anchor" aria-label="anchor" href="#gaussian-copula-with-beta-beta-marginals"></a>
+</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
@@ -233,13 +255,9 @@ least 1; larger values indicate stronger upper-tail dependence.</p></li>
 <span><span class="co">#&gt;  alpha1[1]   beta1[1]  alpha2[1]   beta2[1]     rho[1]</span></span>
 <span><span class="co">#&gt;      2.030      5.065      3.018      4.025      0.498</span></span></code></pre></div>
 </div>
-</div>
 <div class="section level3">
-<h3 id="clayton-copula">Clayton Copula<a class="anchor" aria-label="anchor" href="#clayton-copula"></a>
+<h3 id="clayton-copula-with-normal-lognormal-marginals">Clayton Copula with Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#clayton-copula-with-normal-lognormal-marginals"></a>
 </h3>
-<div class="section level4">
-<h4 id="normal-lognormal-marginals-1">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals-1"></a>
-</h4>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
@@ -274,13 +292,9 @@ least 1; larger values indicate stronger upper-tail dependence.</p></li>
 <span><span class="co">#&gt;          mu1[1]       sigma1[1]          mu2[1]       sigma2[1] theta_clayton[1]</span></span>
 <span><span class="co">#&gt;           0.798           1.986           0.005           0.799            2.015</span></span></code></pre></div>
 </div>
-</div>
 <div class="section level3">
-<h3 id="joe-copula">Joe Copula<a class="anchor" aria-label="anchor" href="#joe-copula"></a>
+<h3 id="joe-copula-with-normal-lognormal-marginals">Joe Copula with Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#joe-copula-with-normal-lognormal-marginals"></a>
 </h3>
-<div class="section level4">
-<h4 id="normal-lognormal-marginals-2">Normal + Lognormal Marginals<a class="anchor" aria-label="anchor" href="#normal-lognormal-marginals-2"></a>
-</h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">2024</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
@@ -316,33 +330,32 @@ least 1; larger values indicate stronger upper-tail dependence.</p></li>
 <span><span class="co">#&gt;       0.810       1.994      -0.002       0.803        2.008</span></span></code></pre></div>
 </div>
 </div>
-</div>
 <div class="section level2">
 <h2 id="model-diagnostics">Model Diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
 </h2>
-<p>After fitting a model, check the following diagnostics to ensure the
-results are reliable.</p>
+<p>After fitting a model, check these diagnostics to ensure reliable
+results.</p>
 <div class="section level3">
-<h3 id="rhat-and-effective-sample-size">Rhat and Effective Sample Size<a class="anchor" aria-label="anchor" href="#rhat-and-effective-sample-size"></a>
+<h3 id="convergence-rhat-and-effective-sample-size">Convergence: Rhat and Effective Sample Size<a class="anchor" aria-label="anchor" href="#convergence-rhat-and-effective-sample-size"></a>
 </h3>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output includes <code>rhat</code>,
-<code>ess_bulk</code>, and <code>ess_tail</code> for each parameter.
-These are computed by the <code>posterior</code> package.</p>
+<code>ess_bulk</code>, and <code>ess_tail</code> for each parameter,
+computed by the <code>posterior</code> package.</p>
 <ul>
 <li>
-<strong>Rhat</strong> should be close to 1.00 (below 1.01) for all
-parameters. Values above 1.01 suggest the chains have not
-converged.</li>
+<strong>Rhat</strong> should be below 1.01 for all parameters.
+Values above 1.01 suggest the chains have not converged.</li>
 <li>
 <strong>ess_bulk</strong> and <strong>ess_tail</strong> report the
-effective sample size for bulk and tail quantities of the posterior. As
-a rule of thumb, aim for at least 400 effective samples per
-parameter.</li>
+effective sample size for bulk and tail quantities of the posterior. Aim
+for at least 400 effective samples per parameter.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Check convergence</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">summ</span><span class="op">$</span><span class="va">rhat</span> <span class="op">&lt;</span> <span class="fl">1.01</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Check effective sample sizes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">summ</span><span class="op">$</span><span class="va">ess_bulk</span> <span class="op">&gt;</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -359,16 +372,15 @@ toward 1:</p>
 <span>  seed <span class="op">=</span> <span class="va">seed</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>If divergences persist at <code>adapt_delta = 0.99</code>, this may
-indicate a fundamental model-data mismatch (for example, using a Clayton
-copula for data with upper tail dependence).</p>
+indicate a model-data mismatch (for example, using a Clayton copula for
+data with upper tail dependence).</p>
 </div>
 <div class="section level3">
 <h3 id="model-comparison-with-loo-cv">Model Comparison with LOO-CV<a class="anchor" aria-label="anchor" href="#model-comparison-with-loo-cv"></a>
 </h3>
 <p>The model stores pointwise log-likelihoods (<code>log_lik</code>) in
-the generated quantities block. You can use these with the
-<code>loo</code> package to compare copula models via approximate
-leave-one-out cross-validation:</p>
+the generated quantities block. Use these with the <code>loo</code>
+package for approximate leave-one-out cross-validation:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/loo/" class="external-link">loo</a></span><span class="op">)</span></span>
 <span></span>
@@ -389,172 +401,161 @@ preferred.</p>
 <div class="section level2">
 <h2 id="prior-specification">Prior Specification<a class="anchor" aria-label="anchor" href="#prior-specification"></a>
 </h2>
-<p>The Stan model uses the following default priors. These are weakly
-informative and designed to regularize estimation without strongly
-constraining the posterior.</p>
-<p><strong>Marginal distribution priors:</strong></p>
+<p>The Stan model uses weakly informative default priors designed to
+regularize estimation without strongly constraining the posterior.</p>
+<div class="section level3">
+<h3 id="marginal-distribution-priors">Marginal Distribution Priors<a class="anchor" aria-label="anchor" href="#marginal-distribution-priors"></a>
+</h3>
 <table class="table">
 <colgroup>
-<col width="15%">
-<col width="12%">
-<col width="26%">
-<col width="44%">
+<col width="17%">
+<col width="13%">
+<col width="22%">
+<col width="45%">
 </colgroup>
 <thead><tr class="header">
-<th>Distribution</th>
-<th>Parameter</th>
-<th>Prior</th>
-<th>Notes</th>
+<th align="left">Distribution</th>
+<th align="left">Parameter</th>
+<th align="left">Prior</th>
+<th align="left">Notes</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Normal</td>
-<td><code>mu</code></td>
-<td>Normal(0, 5)</td>
-<td>Weakly informative location prior</td>
+<td align="left">Normal</td>
+<td align="left"><code>mu</code></td>
+<td align="left">Normal(0, 5)</td>
+<td align="left">Weakly informative location prior</td>
 </tr>
 <tr class="even">
-<td>Normal</td>
-<td><code>sigma</code></td>
-<td>Lognormal(0, 1)</td>
-<td>Positive-constrained; median = 1</td>
+<td align="left">Normal</td>
+<td align="left"><code>sigma</code></td>
+<td align="left">Lognormal(0, 1)</td>
+<td align="left">Positive-constrained; median = 1</td>
 </tr>
 <tr class="odd">
-<td>Lognormal</td>
-<td><code>mu</code></td>
-<td>Normal(0, 5)</td>
-<td>Weakly informative location prior</td>
+<td align="left">Lognormal</td>
+<td align="left"><code>mu</code></td>
+<td align="left">Normal(0, 5)</td>
+<td align="left">Weakly informative location prior</td>
 </tr>
 <tr class="even">
-<td>Lognormal</td>
-<td><code>sigma</code></td>
-<td>Lognormal(0, 1)</td>
-<td>Positive-constrained; median = 1</td>
+<td align="left">Lognormal</td>
+<td align="left"><code>sigma</code></td>
+<td align="left">Lognormal(0, 1)</td>
+<td align="left">Positive-constrained; median = 1</td>
 </tr>
 <tr class="odd">
-<td>Exponential</td>
-<td><code>lambda</code></td>
-<td>Lognormal(0, 1)</td>
-<td>Positive-constrained; median = 1</td>
+<td align="left">Exponential</td>
+<td align="left"><code>lambda</code></td>
+<td align="left">Lognormal(0, 1)</td>
+<td align="left">Positive-constrained; median = 1</td>
 </tr>
 <tr class="even">
-<td>Beta</td>
-<td><code>alpha</code></td>
-<td>Gamma(2, 0.5)</td>
-<td>Positive; mean = 4</td>
+<td align="left">Beta</td>
+<td align="left"><code>alpha</code></td>
+<td align="left">Gamma(2, 0.5)</td>
+<td align="left">Positive; mean = 4</td>
 </tr>
 <tr class="odd">
-<td>Beta</td>
-<td><code>beta</code></td>
-<td>Gamma(2, 0.5)</td>
-<td>Positive; mean = 4</td>
+<td align="left">Beta</td>
+<td align="left"><code>beta</code></td>
+<td align="left">Gamma(2, 0.5)</td>
+<td align="left">Positive; mean = 4</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Copula dependence parameter priors:</strong></p>
-<table style="width:100%;" class="table">
+</div>
+<div class="section level3">
+<h3 id="copula-dependence-parameter-priors">Copula Dependence Parameter Priors<a class="anchor" aria-label="anchor" href="#copula-dependence-parameter-priors"></a>
+</h3>
+<table class="table">
 <colgroup>
 <col width="11%">
-<col width="18%">
+<col width="20%">
 <col width="28%">
-<col width="41%">
+<col width="40%">
 </colgroup>
 <thead><tr class="header">
-<th>Copula</th>
-<th>Parameter</th>
-<th>Prior</th>
-<th>Notes</th>
+<th align="left">Copula</th>
+<th align="left">Parameter</th>
+<th align="left">Prior</th>
+<th align="left">Notes</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Gaussian</td>
-<td><code>rho</code></td>
-<td>Uniform(-1, 1)</td>
-<td>Flat prior on the correlation</td>
+<td align="left">Gaussian</td>
+<td align="left"><code>rho</code></td>
+<td align="left">Uniform(-1, 1)</td>
+<td align="left">Flat prior on the correlation</td>
 </tr>
 <tr class="even">
-<td>Clayton</td>
-<td><code>theta_clayton</code></td>
-<td>Lognormal(0, 1)</td>
-<td>Positive-constrained; median = 1</td>
+<td align="left">Clayton</td>
+<td align="left"><code>theta_clayton</code></td>
+<td align="left">Lognormal(0, 1)</td>
+<td align="left">Positive-constrained; median = 1</td>
 </tr>
 <tr class="odd">
-<td>Joe</td>
-<td><code>theta_joe</code></td>
-<td>Lognormal(log(2), 0.5)</td>
-<td>Lower-bounded at 1; median = 2</td>
+<td align="left">Joe</td>
+<td align="left"><code>theta_joe</code></td>
+<td align="left">Lognormal(log(2), 0.5)</td>
+<td align="left">Lower-bounded at 1; median = 2</td>
 </tr>
 </tbody>
 </table>
-<p>Custom priors are not currently supported through the R interface. If
-you need different priors, you can modify the Stan model file directly
-(located in <code>inst/stan/fit_bivariate_copula.stan</code>).</p>
+<p>Custom priors are not currently supported through the R interface. To
+use different priors, modify the Stan model file directly at
+<code>inst/stan/fit_bivariate_copula.stan</code>.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="mathematical-derivations">Mathematical Derivations<a class="anchor" aria-label="anchor" href="#mathematical-derivations"></a>
+<h2 id="mathematical-details">Mathematical Details<a class="anchor" aria-label="anchor" href="#mathematical-details"></a>
 </h2>
 <div class="section level3">
-<h3 id="gaussian-copula-log-likelihood">Gaussian Copula Log-Likelihood<a class="anchor" aria-label="anchor" href="#gaussian-copula-log-likelihood"></a>
+<h3 id="gaussian-copula-1">Gaussian Copula<a class="anchor" aria-label="anchor" href="#gaussian-copula-1"></a>
 </h3>
-<p><strong>Transformation to Uniform Marginals</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><msub><mi>F</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>U</mi><mn>2</mn></msub><mo>=</mo><msub><mi>F</mi><mn>2</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-U_1 = F_1(X_1), \quad U_2 = F_2(X_2)
-</annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mn>1</mn></msub><annotation encoding="application/x-tex">F_1</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mn>2</mn></msub><annotation encoding="application/x-tex">F_2</annotation></semantics></math>
-are the CDFs of the marginals.</p>
-<p><strong>Transformation to Standard Normal</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>1</mn></msub><mo>=</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>Z</mi><mn>2</mn></msub><mo>=</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-Z_1 = \Phi^{-1}(U_1), \quad Z_2 = \Phi^{-1}(U_2)
-</annotation></semantics></math></p>
-<p><strong>Copula Density</strong> (ratio of bivariate to product of
-univariate normals):
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></msqrt></mfrac><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo>−</mo><mn>2</mn><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mn>2</mn></mfrac><mo>+</mo><mfrac><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-c(u_1, u_2; \rho) = \frac{1}{\sqrt{1-\rho^2}} \exp\left( -\frac{1}{2(1-\rho^2)}(z_1^2 + z_2^2 - 2\rho z_1 z_2) + \frac{z_1^2}{2} + \frac{z_2^2}{2} \right)
-</annotation></semantics></math></p>
-<p><strong>Log-Likelihood</strong>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>;</mo><mi>ρ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mrow><mi>ρ</mi><msub><mi>z</mi><mn>1</mn></msub><msub><mi>z</mi><mn>2</mn></msub><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>ρ</mi><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>z</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>z</mi><mn>2</mn><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">
-\log c(u_1, u_2; \rho) = -\frac{1}{2} \log(1-\rho^2) + \frac{\rho z_1 z_2 - \frac{1}{2}\rho^2 (z_1^2 + z_2^2)}{1-\rho^2}
-</annotation></semantics></math></p>
+<p><strong>Transformation to uniform marginals:</strong> <span class="math display">\[U_1 = F_1(X_1), \quad U_2 = F_2(X_2)\]</span></p>
+<p>where <span class="math inline">\(F_1\)</span> and <span class="math inline">\(F_2\)</span> are the marginal CDFs.</p>
+<p><strong>Transformation to standard normal:</strong> <span class="math display">\[Z_1 = \Phi^{-1}(U_1), \quad Z_2 =
+\Phi^{-1}(U_2)\]</span></p>
+<p><strong>Copula density</strong> (ratio of bivariate to product of
+univariate normals): <span class="math display">\[c(u_1, u_2; \rho) =
+\frac{1}{\sqrt{1-\rho^2}} \exp\left( -\frac{1}{2(1-\rho^2)}(z_1^2 +
+z_2^2 - 2\rho z_1 z_2) + \frac{z_1^2}{2} + \frac{z_2^2}{2}
+\right)\]</span></p>
+<p><strong>Log-likelihood:</strong> <span class="math display">\[\log
+c(u_1, u_2; \rho) = -\frac{1}{2} \log(1-\rho^2) + \frac{\rho z_1 z_2 -
+\frac{1}{2}\rho^2 (z_1^2 + z_2^2)}{1-\rho^2}\]</span></p>
 </div>
 <div class="section level3">
-<h3 id="clayton-copula-log-likelihood">Clayton Copula Log-Likelihood<a class="anchor" aria-label="anchor" href="#clayton-copula-log-likelihood"></a>
+<h3 id="clayton-copula-1">Clayton Copula<a class="anchor" aria-label="anchor" href="#clayton-copula-1"></a>
 </h3>
-<p>The Clayton copula CDF:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn><mi>/</mi><mi>θ</mi></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>θ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">
-C(u, v; \theta) = \left(u^{-\theta} + v^{-\theta} - 1\right)^{-1/\theta}, \quad \theta &gt; 0
-</annotation></semantics></math></p>
-<p>The density (second mixed partial derivative):
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn><mi>/</mi><mi>θ</mi><mo>−</mo><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-c(u, v; \theta) = (\theta + 1) \, u^{-\theta - 1} \, v^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1 \right)^{-1/\theta - 2}
-</annotation></semantics></math></p>
-<p>Log-likelihood:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>u</mi><mo>+</mo><mo>log</mo><mi>v</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mfrac><mrow><mn>2</mn><mi>θ</mi><mo>+</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>+</mo><msup><mi>v</mi><mrow><mo>−</mo><mi>θ</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\log c(u, v; \theta) = \log(1 + \theta) + (-\theta - 1)(\log u + \log v) - \frac{2\theta + 1}{\theta} \log(u^{-\theta} + v^{-\theta} - 1)
-</annotation></semantics></math></p>
+<p><strong>CDF:</strong> <span class="math display">\[C(u, v; \theta) =
+\left(u^{-\theta} + v^{-\theta} - 1\right)^{-1/\theta}, \quad \theta
+&gt; 0\]</span></p>
+<p><strong>Density</strong> (second mixed partial derivative): <span class="math display">\[c(u, v; \theta) = (\theta + 1) \, u^{-\theta - 1}
+\, v^{-\theta - 1} \left( u^{-\theta} + v^{-\theta} - 1
+\right)^{-1/\theta - 2}\]</span></p>
+<p><strong>Log-likelihood:</strong> <span class="math display">\[\log
+c(u, v; \theta) = \log(1 + \theta) + (-\theta - 1)(\log u + \log v) -
+\frac{2\theta + 1}{\theta} \log(u^{-\theta} + v^{-\theta} -
+1)\]</span></p>
 </div>
 <div class="section level3">
-<h3 id="joe-copula-log-likelihood">Joe Copula Log-Likelihood<a class="anchor" aria-label="anchor" href="#joe-copula-log-likelihood"></a>
+<h3 id="joe-copula-1">Joe Copula<a class="anchor" aria-label="anchor" href="#joe-copula-1"></a>
 </h3>
-<p>The Joe copula CDF:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo stretchy="true" form="prefix">[</mo><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><mo>+</mo><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><mo>−</mo><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mn>1</mn><mi>/</mi><mi>θ</mi></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>θ</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
-C(u, v; \theta) = 1 - \left[\bar{u}^\theta + \bar{v}^\theta - \bar{u}^\theta \bar{v}^\theta\right]^{1/\theta}, \quad \theta \geq 1
-</annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>u</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>1</mn><mo>−</mo><mi>u</mi></mrow><annotation encoding="application/x-tex">\bar{u} = 1-u</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>v</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>1</mn><mo>−</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">\bar{v} = 1-v</annotation></semantics></math>.</p>
-<p>Let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup></mrow><annotation encoding="application/x-tex">a = \bar{u}^\theta</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>θ</mi></msup></mrow><annotation encoding="application/x-tex">b = \bar{v}^\theta</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo>−</mo><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">S = a + b - ab</annotation></semantics></math>.
-The density:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>θ</mi><mspace width="0.167em"></mspace><msup><mover><mi>u</mi><mo accent="true">‾</mo></mover><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><msup><mover><mi>v</mi><mo accent="true">‾</mo></mover><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow></msup><mspace width="0.167em"></mspace><msup><mi>S</mi><mrow><mn>1</mn><mi>/</mi><mi>θ</mi><mo>−</mo><mn>2</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">[</mo><mi>S</mi><mo>+</mo><mfrac><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
-c(u, v; \theta) = \theta \, \bar{u}^{\theta-1} \, \bar{v}^{\theta-1} \, S^{1/\theta - 2} \left[ S + \frac{\theta - 1}{\theta}(1 - a)(1 - b) \right]
-</annotation></semantics></math></p>
-<p>Log-likelihood:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>;</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>log</mo><mi>θ</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">[</mo><mo>log</mo><mover><mi>u</mi><mo accent="true">‾</mo></mover><mo>+</mo><mo>log</mo><mover><mi>v</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mi>θ</mi></mfrac><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>log</mo><mi>S</mi><mo>+</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">[</mo><mi>S</mi><mo>+</mo><mfrac><mrow><mi>θ</mi><mo>−</mo><mn>1</mn></mrow><mi>θ</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
-\log c(u, v; \theta) = \log\theta + (\theta-1)[\log\bar{u} + \log\bar{v}] + \left(\frac{1}{\theta} - 2\right)\log S + \log\left[S + \frac{\theta-1}{\theta}(1-a)(1-b)\right]
-</annotation></semantics></math></p>
+<p><strong>CDF</strong> where <span class="math inline">\(\bar{u} =
+1-u\)</span>, <span class="math inline">\(\bar{v} = 1-v\)</span>: <span class="math display">\[C(u, v; \theta) = 1 - \left[\bar{u}^\theta +
+\bar{v}^\theta - \bar{u}^\theta \bar{v}^\theta\right]^{1/\theta}, \quad
+\theta \geq 1\]</span></p>
+<p>Let <span class="math inline">\(a = \bar{u}^\theta\)</span>, <span class="math inline">\(b = \bar{v}^\theta\)</span>, <span class="math inline">\(S = a + b - ab\)</span>.</p>
+<p><strong>Density:</strong> <span class="math display">\[c(u, v;
+\theta) = \theta \, \bar{u}^{\theta-1} \, \bar{v}^{\theta-1} \,
+S^{1/\theta - 2} \left[ S + \frac{\theta - 1}{\theta}(1 - a)(1 - b)
+\right]\]</span></p>
+<p><strong>Log-likelihood:</strong> <span class="math display">\[\log
+c(u, v; \theta) = \log\theta + (\theta-1)[\log\bar{u} + \log\bar{v}] +
+\left(\frac{1}{\theta} - 2\right)\log S + \log\left[S +
+\frac{\theta-1}{\theta}(1-a)(1-b)\right]\]</span></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
